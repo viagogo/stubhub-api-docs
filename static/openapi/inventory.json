@@ -1041,7 +1041,7 @@
           {
             "name": "sort",
             "in": "query",
-            "description": "Determines the ordering of items. A comma-separated string containing `number_of_tickets`, `resource_version`, or`start_date`.",
+            "description": "Determines the ordering of items. A comma-separated string containing `id`, `number_of_tickets`, or`resource_version`.",
             "schema": {
               "type": "string"
             }
