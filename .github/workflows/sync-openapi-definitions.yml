@@ -31,8 +31,7 @@ jobs:
       - name: Sync Webhooks API spec
         run: curl -o static/openapi/webhooks.json https://api.stubhub.net/v2/openapi/webhooks.json
 
-      - uses: actions/checkout@v2
-      - name: Find and Replace
+      - name: Find and Replace viagogo in URLs
         uses: jacobtomlinson/gha-find-replace@v2
         with:
           find: ".viagogo."
@@ -40,8 +39,7 @@ jobs:
           include: "static/openapi/**"
           regex: true
 
-      - uses: actions/checkout@v2
-      - name: Find and Replace
+      - name: Find and Replace viagogo everywhere else
         uses: jacobtomlinson/gha-find-replace@v2
         with:
           find: "viagogo"
