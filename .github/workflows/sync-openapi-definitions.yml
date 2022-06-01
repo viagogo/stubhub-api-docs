@@ -31,6 +31,24 @@ jobs:
       - name: Sync Webhooks API spec
         run: curl -o static/openapi/webhooks.json https://api.stubhub.net/v2/openapi/webhooks.json
 
+      - uses: actions/checkout@v2
+      - name: Find and Replace
+        uses: jacobtomlinson/gha-find-replace@v2
+        with:
+          find: ".viagogo."
+          replace: ".stubhub."
+          include: "static/openapi/**"
+          regex: true
+
+      - uses: actions/checkout@v2
+      - name: Find and Replace
+        uses: jacobtomlinson/gha-find-replace@v2
+        with:
+          find: "viagogo"
+          replace: "StubHub"
+          include: "static/openapi/**"
+          regex: true
+
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
