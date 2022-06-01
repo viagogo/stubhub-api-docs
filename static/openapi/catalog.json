@@ -2,7 +2,7 @@
   "openapi": "3.0.0",
   "info": {
     "title": "StubHub Catalog API",
-    "version": "1.0.0.27",
+    "version": "1.0.0.29",
     "x-logo": {
       "url": "https://img.vggcdn.net/images/Assets/Icons/bfx/stubhub-logo-merch-purple-mweb.440b3765.svg",
       "backgroundColor": "#222222"
@@ -584,6 +584,10 @@
             "type": "boolean",
             "description": "True if the event start and end date have been confirmed; Otherwise, false."
           },
+          "time_confirmed": {
+            "type": "boolean",
+            "description": "True if the event start and end time have been confirmed; Otherwise, false."
+          },
           "type": {
             "type": "string",
             "description": "The type of the event. Can be `Main` or `Parking`"
@@ -595,6 +599,10 @@
                 "$ref": "#/components/schemas/Money"
               }
             ]
+          },
+          "status": {
+            "type": "string",
+            "description": "The status of the event. Can be `Normal`, `Postponed`, `Cancelled`, `Rescheduled`, `Relocated`, `RelocatedAndRescheduled`, `Draft`, `Contingent` and `Deleted`"
           },
           "_links": {
             "nullable": true,

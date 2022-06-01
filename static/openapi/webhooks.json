@@ -718,6 +718,14 @@
         "title": "SalesTopicEmbeddedResources",
         "type": "object",
         "properties": {
+          "barcodes": {
+            "type": "array",
+            "description": "The barcodes that are linked to the sale.",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/BarcodeInformation"
+            }
+          },
           "event": {
             "description": "The event for this sale.",
             "nullable": true,
@@ -762,6 +770,42 @@
                 "$ref": "#/components/schemas/Webhook"
               }
             ]
+          }
+        }
+      },
+      "BarcodeInformation": {
+        "type": "object",
+        "description": "A set of barcodes for a seat.",
+        "additionalProperties": false,
+        "properties": {
+          "seat_ordinal": {
+            "type": "integer",
+            "description": "An ordinal number for a seat.",
+            "format": "int32",
+            "nullable": true
+          },
+          "seat": {
+            "type": "string",
+            "description": "Seat number.",
+            "nullable": true
+          },
+          "row": {
+            "type": "string",
+            "description": "Row of ticket.",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "description": "Status of the barcode. Can be `Received` or `FailedValidation`",
+            "nullable": true
+          },
+          "barcode_values": {
+            "type": "array",
+            "description": "Barcode(s) values for this seat.",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
           }
         }
       },
@@ -1214,6 +1258,14 @@
         "title": "ProvisionalSaleTopicEmbeddedResources",
         "type": "object",
         "properties": {
+          "barcodes": {
+            "type": "array",
+            "description": "The barcodes that are linked to the sale.",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/BarcodeInformation"
+            }
+          },
           "event": {
             "description": "The event for this sale.",
             "nullable": true,
@@ -1312,6 +1364,14 @@
         "title": "CancelProvisionalSaleTopicEmbeddedResources",
         "type": "object",
         "properties": {
+          "barcodes": {
+            "type": "array",
+            "description": "The barcodes that are linked to the sale.",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/BarcodeInformation"
+            }
+          },
           "event": {
             "description": "The event for this sale.",
             "nullable": true,
@@ -1465,34 +1525,6 @@
           }
         }
       },
-      "BarcodeInformation": {
-        "type": "object",
-        "description": "A set of barcodes for a seat.",
-        "additionalProperties": false,
-        "properties": {
-          "seat_ordinal": {
-            "type": "integer",
-            "description": "An ordinal number for a seat.",
-            "format": "int32",
-            "nullable": true
-          },
-          "seat": {
-            "type": "string",
-            "description": "Seat number.",
-            "nullable": true
-          },
-          "row": {
-            "type": "string",
-            "description": "Row of ticket.",
-            "nullable": true
-          },
-          "status": {
-            "type": "string",
-            "description": "Status of the barcode. Can be `Received` or `FailedValidation`",
-            "nullable": true
-          }
-        }
-      },
       "SellerListingUpdatesTopic": {
         "type": "object",
         "description": "Triggered when an update is made to a listing that you did not initiate. You will need to filter by the action that you are interested in. The currently support actions are `FailedBarcodeValidation` and `ListingDeliverabilityExpired`. `FailedBarcodeValidation` will tell you if validation of a set of barcodes uploaded against a listing has failed, and barcodes need re-uploading. `ListingDeliverabilityExpired` will tell you that a listing is not longer deliverable to a customer. To increase the deliverability of electronic type tickets, preupload them (e.g. pre-upload barcodes or PDF files.) To increase deliverability of paper tickets, opt your tickets into our LMS program.",
@@ -1549,7 +1581,7 @@
             "description": "The barcodes that are linked to the listing.",
             "nullable": true,
             "items": {
-              "$ref": "#/components/schemas/BarcodeInformation"
+              "$ref": "#/components/schemas/BarcodeInformation2"
             }
           },
           "event": {
@@ -1587,6 +1619,42 @@
                 "$ref": "#/components/schemas/Webhook"
               }
             ]
+          }
+        }
+      },
+      "BarcodeInformation2": {
+        "type": "object",
+        "description": "A set of barcodes for a seat.",
+        "additionalProperties": false,
+        "properties": {
+          "seat_ordinal": {
+            "type": "integer",
+            "description": "An ordinal number for a seat.",
+            "format": "int32",
+            "nullable": true
+          },
+          "seat": {
+            "type": "string",
+            "description": "Seat number.",
+            "nullable": true
+          },
+          "row": {
+            "type": "string",
+            "description": "Row of ticket.",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "description": "Status of the barcode. Can be `Received` or `FailedValidation`",
+            "nullable": true
+          },
+          "barcode_values_sha256_hashed": {
+            "type": "array",
+            "description": "SHA256-hashed barcode(s) for this seat.",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
           }
         }
       },
