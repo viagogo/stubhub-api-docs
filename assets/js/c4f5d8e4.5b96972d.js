@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkapi_docs=self.webpackChunkapi_docs||[]).push([[4195],{2841:function(e,n,t){t.r(n),t.d(n,{default:function(){return a}});var u=t(7294),c=t(6775),r=t(4996);function a(){var e=(0,r.Z)("/blog");return u.createElement(c.l_,{to:e})}}}]);

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://developer.stubhub.com/blog</id>
+    <title>StubHub API Blog</title>
+    <updated>2022-05-31T00:00:00.000Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="alternate" href="https://developer.stubhub.com/blog"/>
+    <subtitle>StubHub API Blog</subtitle>
+    <icon>https://developer.stubhub.com/img/favicon-32x32.png</icon>
+    <entry>
+        <title type="html"><![CDATA[Migrating to a New API]]></title>
+        <id>/2022/05/31/migrating-to-new-api</id>
+        <link href="https://developer.stubhub.com/blog/2022/05/31/migrating-to-new-api"/>
+        <updated>2022-05-31T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[We are migrating to a new API to help you tap into the world's largest ticket marketplace and build]]></summary>
+        <content type="html"><![CDATA[<p>We are migrating to a new API to help you tap into the world&#x27;s largest ticket marketplace and build
+amazing apps and experiences. View the <a href="https://developer.stubhub.com/docs/overview/introduction">new documentation</a> or
+<a href="mailto:API.Support@stubhub.com">Contact Us</a> to find out more.</p>]]></content>
+        <author>
+            <name>StubHub</name>
+            <uri>https://stubhub.com</uri>
+        </author>
+    </entry>
+</feed>

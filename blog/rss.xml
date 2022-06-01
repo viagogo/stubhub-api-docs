@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+    <channel>
+        <title>StubHub API Blog</title>
+        <link>https://developer.stubhub.com/blog</link>
+        <description>StubHub API Blog</description>
+        <lastBuildDate>Tue, 31 May 2022 00:00:00 GMT</lastBuildDate>
+        <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
+        <generator>https://github.com/jpmonette/feed</generator>
+        <item>
+            <title><![CDATA[Migrating to a New API]]></title>
+            <link>https://developer.stubhub.com/blog/2022/05/31/migrating-to-new-api</link>
+            <guid>/2022/05/31/migrating-to-new-api</guid>
+            <pubDate>Tue, 31 May 2022 00:00:00 GMT</pubDate>
+            <description><![CDATA[We are migrating to a new API to help you tap into the world's largest ticket marketplace and build]]></description>
+            <content:encoded><![CDATA[<p>We are migrating to a new API to help you tap into the world&#x27;s largest ticket marketplace and build
+amazing apps and experiences. View the <a href="https://developer.stubhub.com/docs/overview/introduction">new documentation</a> or
+<a href="mailto:API.Support@stubhub.com">Contact Us</a> to find out more.</p>]]></content:encoded>
+        </item>
+    </channel>
+</rss>
