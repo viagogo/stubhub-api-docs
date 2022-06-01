@@ -6,5 +6,5 @@ sandbox credentials to make calls to the sandbox environment. When you're set
 to go live, use your production credentials to make calls to the production
 environment.
 
-* Sandbox API root endpoint: `https://sandbox.api.stubhub.com/`
+* Sandbox API root endpoint: `https://sandbox.api.viagogo.net/`
 * Sandbox OAuth2 token endpoint: `https://sandbox.account.stubhub.com/oauth2/token`

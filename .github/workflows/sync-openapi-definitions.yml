@@ -17,19 +17,19 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Sync Account API spec
-        run: curl -o static/openapi/account.json https://api.stubhub.net/v2/openapi/account.json
+        run: curl -o static/openapi/account.json https://api.viagogo.net/v2/openapi/account.json
 
       - name: Sync Catalog API spec
-        run: curl -o static/openapi/catalog.json https://api.stubhub.net/catalog/openapi/openapi.json
+        run: curl -o static/openapi/catalog.json https://api.viagogo.net/catalog/openapi/openapi.json
 
       - name: Sync Inventory API spec
-        run: curl -o static/openapi/inventory.json https://api.stubhub.net/v2/openapi/inventory.json
+        run: curl -o static/openapi/inventory.json https://api.viagogo.net/v2/openapi/inventory.json
 
       - name: Sync Sales API spec
-        run: curl -o static/openapi/sales.json https://api.stubhub.net/v2/openapi/sales.json
+        run: curl -o static/openapi/sales.json https://api.viagogo.net/v2/openapi/sales.json
 
       - name: Sync Webhooks API spec
-        run: curl -o static/openapi/webhooks.json https://api.stubhub.net/v2/openapi/webhooks.json
+        run: curl -o static/openapi/webhooks.json https://api.viagogo.net/v2/openapi/webhooks.json
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3

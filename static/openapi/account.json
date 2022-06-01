@@ -10,11 +10,11 @@
   },
   "servers": [
     {
-      "url": "https://api.stubhub.net/v2",
+      "url": "https://api.viagogo.net/v2",
       "description": "Production"
     },
     {
-      "url": "https://sandbox.api.stubhub.net/v2",
+      "url": "https://sandbox.api.viagogo.net/v2",
       "description": "Sandbox"
     }
   ],
