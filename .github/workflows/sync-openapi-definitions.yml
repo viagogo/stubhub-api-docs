@@ -31,6 +31,14 @@ jobs:
       - name: Sync Webhooks API spec
         run: curl -o static/openapi/webhooks.json https://api.stubhub.net/v2/openapi/webhooks.json
 
+      - name: Find and Replace logo URLs
+        uses: jacobtomlinson/gha-find-replace@v2
+        with:
+          find: "https://img.vggcdn.net/img/assets/logo/viagogo_logo_apidocs.png"
+          replace: "https://img.vggcdn.net/images/Assets/Icons/bfx/stubhub-logo-merch-purple-mweb.440b3765.svg"
+          include: "static/openapi/**"
+          regex: false
+
       - name: Find and Replace viagogo in URLs
         uses: jacobtomlinson/gha-find-replace@v2
         with:
