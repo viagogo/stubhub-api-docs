@@ -5,7 +5,7 @@ world’s largest ticket marketplace. Your application can use the API to search
 for and view events, purchase tickets for an event or list tickets on the
 StubHub platform.
 
-All API access is over HTTPS, and accessed from the `api.stubhub.com` domain.
+All API access is over HTTPS, and accessed from the `api.stubhub.net` domain.
 Request and response payloads are formatted as `application/hal+json`, which is
 basically just plain old JSON with hyperlinks (see [Media Type](./media-type.md)).
 We support [cross-origin resource sharing][cors] to allow you to interact
