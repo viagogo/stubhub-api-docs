@@ -37,7 +37,7 @@ jobs:
           find: ".viagogo."
           replace: ".stubhub."
           include: "static/openapi/**"
-          regex: true
+          regex: false
 
       - name: Find and Replace viagogo everywhere else
         uses: jacobtomlinson/gha-find-replace@v2
@@ -45,7 +45,7 @@ jobs:
           find: "viagogo"
           replace: "StubHub"
           include: "static/openapi/**"
-          regex: true
+          regex: false
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
