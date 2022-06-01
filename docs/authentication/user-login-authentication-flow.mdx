@@ -36,7 +36,7 @@ curl -X GET "https://account.stubhub.com/authorize?client_id=clientId&response_t
   <TabItem value="csharp" label="C#">
 
 ```csharp
-var api = new StubHubClient("clientId",
+var api = new ViagogoClient("clientId",
                             "clientSecret",
                             new ProductHeaderValue("MyAwesomeApp"));
 
@@ -119,7 +119,7 @@ curl -X POST "https://account.stubhub.com/oauth2/token"
   <TabItem value="csharp" label="C#">
 
 ```csharp
-var token = await _StubHubClient.OAuth2.GetAuthorizationCodeAccessTokenAsync(
+var token = await _viagogoClient.OAuth2.GetAuthorizationCodeAccessTokenAsync(
                                           "cddgafgfvawe",
                                           new Uri("https://myapp.com/callback"),
                                           new[] { "read:sellerlistings", "write:sellerlistings" });

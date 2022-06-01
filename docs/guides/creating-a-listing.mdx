@@ -33,7 +33,7 @@ The following code creates a listing via this mechanism.
 var token = "PLEASE_SET_TOKEN";
 var environment = ApiEnvironment.Sandbox;
 var config = new GogoKitConfiguration() { StubHubApiEnvironment = environment };
-var client = new StubHubClient(new ProductHeaderValue("APPLICATION_NAME", "1.0"),
+var client = new ViagogoClient(new ProductHeaderValue("APPLICATION_NAME", "1.0"),
     config,
     new InMemoryOAuth2TokenStore());
 await client.TokenStore.SetTokenAsync(new OAuth2Token() { AccessToken = token, ExpiresIn = int.MaxValue, IssueDate = DateTimeOffset.Now });

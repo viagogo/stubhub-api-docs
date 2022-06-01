@@ -4,17 +4,17 @@
     "title": "StubHub Inventory API",
     "version": "2.249.0.0",
     "x-logo": {
-      "url": "https://img.vggcdn.net/img/assets/logo/viagogo_logo_apidocs.png",
+      "url": "https://img.vggcdn.net/images/Assets/Icons/bfx/stubhub-logo-merch-purple-mweb.440b3765.svg",
       "backgroundColor": "#222222"
     }
   },
   "servers": [
     {
-      "url": "https://api.viagogo.net/v2",
+      "url": "https://api.stubhub.net/v2",
       "description": "Production"
     },
     {
-      "url": "https://sandbox.api.viagogo.net/v2",
+      "url": "https://sandbox.api.stubhub.net/v2",
       "description": "Sandbox"
     }
   ],

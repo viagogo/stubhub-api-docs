@@ -19,22 +19,17 @@ will receive a `401 Unauthorized` error response (see
 
 ## How to use these docs
 
-### 1. Choose a Client Library
-
-[Client libraries](./libraries.md) are available in several languages. Choose the library in your
-programming language of choice.
-
-### 2. Authenticate your Application to Access the API
+### 1. Authenticate your Application to Access the API
 
 See [Authentication](../authentication/index.mdx) to get an access token to access the StubHub API.
 All API requests must be authenticated or you will receive a `401 Unauthorized` error response.
 
-### 3. Follow the Guides
+### 2. Follow the Guides
 
 Follow our end-to-end [Guides](../guides/index.mdx) on integrating with the StubHub API for common
 use cases.
 
-### 4. Use the API Reference for more details
+### 3. Use the API Reference for more details
 
 The [API Reference](/api-reference/inventory) gives a complete reference to our HTTP APIs that you
 can use to interact with the StubHub platform.

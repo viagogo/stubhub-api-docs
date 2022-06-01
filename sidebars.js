@@ -22,7 +22,6 @@ const sidebars = {
       collapsible: true,
       items: [
         'overview/introduction',
-        'overview/libraries',
         'overview/media-type',
         'overview/sandbox-environment',
         'overview/basic-types',

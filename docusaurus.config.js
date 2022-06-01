@@ -6,7 +6,7 @@ require('dotenv').config();
 const lightCodeTheme = require('prism-react-renderer/themes/github');
 const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 
-const githubRepoUrl = 'https://github.com/stubhub/stubhub-api-docs';
+const githubRepoUrl = 'https://github.com/viagogo/stubhub-api-docs';
 const githubRepoEditUrl = githubRepoUrl + '/tree/main';
 
 /**
@@ -70,7 +70,7 @@ const config = {
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
-  favicon: 'img/favicon.ico',
+  favicon: 'img/favicon-32x32.png',
   organizationName: 'stubhub',
   projectName: 'stubhub-api-docs',
   deploymentBranch: 'gh-pages',
@@ -110,7 +110,7 @@ const config = {
         title: 'StubHub API',
         logo: {
           alt: 'StubHub Logo',
-          src: 'img/stubhub-logo.png',
+          src: 'https://img.vggcdn.net/images/Assets/Icons/bfx/stubhub-logo-merch-purple-mweb.440b3765.svg',
         },
         items: [
           {
@@ -163,10 +163,6 @@ const config = {
               {
                 label: 'Overview',
                 to: '/docs/overview/introduction',
-              },
-              {
-                label: 'Client Libraries',
-                to: '/docs/overview/libraries',
               },
               {
                 label: 'Authentication',

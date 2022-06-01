@@ -1,6 +1,6 @@
 # StubHub API Documentation
 
-[![CI](https://github.com/viagogo/viagogo-api-docs/actions/workflows/ci.yml/badge.svg)](https://github.com/viagogo/viagogo-api-docs/actions/workflows/ci.yml)
+[![CI](https://github.com/viagogo/stubhub-api-docs/actions/workflows/ci.yml/badge.svg)](https://github.com/viagogo/stubhub-api-docs/actions/workflows/ci.yml)
 
 This is the documentation website for the StubHub API! (http://developer.stubhub.com)
 
