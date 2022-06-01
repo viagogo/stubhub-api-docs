@@ -1,0 +1,180 @@
+---
+description: Obtain access to user-specific data.
+---
+
+# User-Login Authentication Flow
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+Applications can use the [authorization code grant type][authorizationcode] of
+the [OAuth2 specification][oauth2] to obtain an access token by redirecting a
+user to StubHub and having them authorize your application. Access tokens
+obtained using this grant type will provide access to user-specific data
+(purchases, sales, seller-listings, etc) as well as public, non-user-specific
+data (events, listings, etc).
+
+[oauth2]: http://oauth.net/2/
+[authorizationcode]: http://tools.ietf.org/html/rfc6749#section-1.3.1
+
+## 1. Obtain user's consent
+
+You obtain a user's consent to make API calls on their behalf by redirecting
+their user agent (browser, webview, etc) to the authorization endpoint with the
+parameters listed below.
+
+### Request
+
+<Tabs>
+  <TabItem value="curl" label="curl" default>
+
+```bash
+curl -X GET "https://account.stubhub.com/authorize?client_id=clientId&response_type=code&redirect_uri=https://myapp.com/callback&scope=read:sellerlistings%20write:sellerlistings&state=12345"
+```
+
+  </TabItem>
+  <TabItem value="csharp" label="C#">
+
+```csharp
+var api = new StubHubClient("clientId",
+                            "clientSecret",
+                            new ProductHeaderValue("MyAwesomeApp"));
+
+// Redirect the user's user agent to this URL
+var authorizationUrl = await api.OAuth2.GetAuthorizationUrl(
+                            new Uri("https://myapp.com/callback"),
+                            new[] { "read:sellerlistings", "write:sellerlistings" },
+                            "12345");
+```
+
+  </TabItem>
+  <TabItem value="ruby" label="Ruby">
+
+```ruby
+# TODO
+```
+
+  </TabItem>
+
+  <TabItem value="python" label="Python">
+
+```python
+# TODO
+```
+
+  </TabItem>
+
+  <TabItem value="php" label="PHP">
+
+```php
+// TODO
+```
+
+  </TabItem>
+</Tabs>
+
+### Parameters
+
+| **Name** | **Type** | **Description** |
+| -------- | -------- | --------------- |
+| `client_id` | `string` | *Required* Unique client identifier obtained through the application registration process |
+| `response_type` | `string` | Set to `code` to request that an authorization code be sent back to the application return URL |
+| `redirect_uri` | `string` | Application callback URL where the authorization code is sent. This must match the URL registered for your application |
+| `scope` | `string` | Space-delimited string of the [scopes](#scopes) you would like |
+| `state` | `string` | An opaque value used to maintain state between the authorize request and the callback |
+
+:::info
+
+**`redirect_uri` must be SSL.** OAuth2 is only secure if it is used over SSL so
+your callback URL must use HTTPs.
+
+:::
+
+## 2. Process the authorize callback
+
+Once the user authorizes your application, stubhub redirects (`HTTP 302`) the
+user's user-agent to the return URL with the authorization code appended in the
+`code` query parameter.
+
+## 3. Obtain an access token
+
+The authorization code received above can then be exchanged for an access token.
+
+### Request
+
+<Tabs>
+  <TabItem value="curl" label="curl" default>
+
+```bash
+curl -X POST "https://account.stubhub.com/oauth2/token"
+  -u "clientId:clientSecret" --basic
+  -H "Content-Type: application/x-www-form-urlencoded"
+  -d "grant_type=authorization_code"
+  -d "code=cddgafgfvawe"
+  --data-urlencode "redirect_uri=https://myapp.com/callback"
+  --data-urlencode "scope=read:sellerlistings write:sellerlistings"
+```
+
+  </TabItem>
+  <TabItem value="csharp" label="C#">
+
+```csharp
+var token = await _StubHubClient.OAuth2.GetAuthorizationCodeAccessTokenAsync(
+                                          "cddgafgfvawe",
+                                          new Uri("https://myapp.com/callback"),
+                                          new[] { "read:sellerlistings", "write:sellerlistings" });
+```
+
+  </TabItem>
+  <TabItem value="ruby" label="Ruby">
+
+```ruby
+# TODO
+```
+
+  </TabItem>
+
+  <TabItem value="python" label="Python">
+
+```python
+# TODO
+```
+
+  </TabItem>
+
+  <TabItem value="php" label="PHP">
+
+```php
+// TODO
+```
+
+  </TabItem>
+</Tabs>
+
+### Headers
+
+| **Name** | **Value** |
+| -------- | --------- |
+| `Authorization` | Basic {value from step 1} |
+| `Content-Type` | `application/x-www-form-urlencoded` |
+
+### Parameters
+
+| **Name** | **Type** | **Description** |
+| -------- | -------- | --------------- |
+| `grant_type` | `string` | *Required*. Value should be `authorization_code` |
+| `code` | `string` | The authorization code that was sent to your application's return URL |
+| `redirect_uri` | `string` | Application callback URL where the authorization code is sent. This must match the URL registered for your application |
+| `scope` | `string` | Space-delimited string of the [scopes](./scopes.md) you would like. |
+
+### Response
+
+```json
+{
+  "access_token": "pYXQiOjE0MjI1MzY0NjEsInNjb3BlIjo",
+  "token_type": "bearer",
+  "expires_in": 3600,
+  "refresh_token": "tGzv3JOkF0XG5Qx2TlKWIA",
+  "scope": "read:sellerlistings write:sellerlistings"
+}
+```

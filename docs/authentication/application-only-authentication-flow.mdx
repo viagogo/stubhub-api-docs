@@ -1,0 +1,106 @@
+---
+description: Obtain access to public, non-user-specific data (events, venues, etc)
+---
+
+# Application-Only Authentication Flow
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+Applications can use the [client credentials grant type][clientcredentials] of
+the [OAuth2 specification][oauth2] to get an access token that will provide
+access to public, non-user-specific data (events, listings, etc).
+
+[oauth2]: http://oauth.net/2/
+[clientcredentials]: http://tools.ietf.org/html/rfc6749#section-1.3.4
+
+## 1. Create a Basic Authorization header {#create-basic-auth-header}
+
+[rfc1738]: http://www.ietf.org/rfc/rfc1738.txt
+
+* URL encode your application's client id and client secret according to
+[RFC 1738][rfc1738]
+* Concatenate the encoded client id, a colon character “:” and the encoded
+consumer secret into a single string
+* Base64 encode the string from the previous step
+
+## 2. Obtain an access token
+
+* The value calculated in [Step 1](#create-basic-auth-header) must be
+exchanged for an access token:
+
+### Request
+
+<Tabs>
+  <TabItem value="curl" label="curl" default>
+
+```bash
+curl -X POST "https://account.stubhub.com/oauth2/token"
+  -u "clientId:clientSecret" --basic
+  -H "Content-Type: application/x-www-form-urlencoded"
+  -d "grant_type=client_credentials"
+  -d "scope=read:events"
+```
+
+  </TabItem>
+  <TabItem value="csharp" label="C#">
+
+```csharp
+var api = new StubHubClient(
+    "clientId",
+    "clientSecret",
+    new ProductHeaderValue("MyAwesomeApp"));
+var token = await api.OAuth2.GetClientAccessTokenAsync(new[] {"read:events"});
+```
+
+  </TabItem>
+  <TabItem value="ruby" label="Ruby">
+
+```ruby
+api = GogoKit::Client.new(client_id: CLIENT_ID, client_secret: CLIENT_SECRET)
+token = api.get_client_access_token({scope: 'read:events'})
+```
+
+  </TabItem>
+
+  <TabItem value="python" label="Python">
+
+```python
+# TODO
+```
+
+  </TabItem>
+
+  <TabItem value="php" label="PHP">
+
+```php
+// TODO
+```
+
+  </TabItem>
+</Tabs>
+
+### Headers
+
+| **Name** | **Value** |
+| -------- | --------- |
+| `Authorization` | Basic {value from step 1} |
+| `Content-Type` | `application/x-www-form-urlencoded` |
+
+### Parameters
+
+| **Name** | **Type** | **Description** |
+| -------- | -------- | --------------- |
+| `grant_type` | `string` | *Required*. Value should be `client_credentials` |
+| `scope` | `string` | Space-delimited string of the [scopes](./scopes.md) you would like. |
+
+### Response
+
+```json
+{
+  "access_token": "pYXQiOjE0MjI1MzY0NjEsInNjb3BlIjo",
+  "token_type": "bearer",
+  "expires_in": 86400,
+  "scope": "read:events"
+}
+```

@@ -1,0 +1,113 @@
+---
+description: Create listings on the StubHub platform.
+---
+
+# Creating a Listing
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+The recommended way to create listings is to use the [Create Listings for Requested Events][create-listing-endpoint]
+endpoint. This endpoint accepts text values for all the event information (e.g. name, local date,
+venue name, venue city and venue country) and the StubHub API will attempt to map this to an event
+on the StubHub platform.
+
+We recommend using this endpoint for creating listings so that your listing
+can be created even if the event you are listing for does not exist on the StubHub platform yet.
+The event will then get created asynchronously and go live on the platform with your listing
+attached.
+
+To prevent duplication of listings in our system due to race conditions, it is recommended that you
+provide an `external_id` ( the Id of the listing in your system when creating a listing). If an
+attempt is made to create a listing with an `external_id` that already exists for your user, then we
+will delete the old listing and create the new one.
+
+[create-listing-endpoint]: /api-reference/inventory/#operation/SellerListings_CreateListingForRequestedEvent
+
+The following code creates a listing via this mechanism.
+
+<Tabs>
+  <TabItem value="csharp" label="C#">
+
+```csharp
+var token = "PLEASE_SET_TOKEN";
+var environment = ApiEnvironment.Sandbox;
+var config = new GogoKitConfiguration() { StubHubApiEnvironment = environment };
+var client = new StubHubClient(new ProductHeaderValue("APPLICATION_NAME", "1.0"),
+    config,
+    new InMemoryOAuth2TokenStore());
+await client.TokenStore.SetTokenAsync(new OAuth2Token() { AccessToken = token, ExpiresIn = int.MaxValue, IssueDate = DateTimeOffset.Now });
+
+var newListing = new NewRequestedEventSellerListing
+{
+
+            ExternalId = "Your_Arbitrary_Id",
+            Seating = new Seating
+    {
+            Section = "101",
+            Row = "a",
+            SeatFrom = "3",
+            SeatTo = "5"
+        },
+    TicketPrice = new Money
+    {
+            Amount = 150,
+            Currency = "USD"
+        },
+    FaceValue = new Money
+    {
+            Amount = 200,
+            Currency = "USD"
+        },
+    TicketType = "ETicket",
+    SplitType = "None",
+    NumberOfTickets = 4,
+    DisplayNumberOfTickets = 2,
+    Event = new Event
+    {
+            Name = "Dreams Come True",
+            StartDate = new DateTimeOffset(2025, 11, 28, 15, 30, 0, new TimeSpan(9, 0, 0)),
+            Venue = new Venue
+            {
+            Name = "Osaka Jo Hall",
+            City = "Osaka",
+            StateProvince = "Kansai",
+            Country = new Country {Code = "JP"}
+            }
+    },
+    Venue = new Venue
+    {
+            Name = "Osaka Jo Hall",
+            City = "Osaka",
+            Country = new Country {Code = "JP"}
+    }
+};
+
+var listing = await client.SellerListings.CreateAsync(newListing);
+```
+
+  </TabItem>
+  <TabItem value="ruby" label="Ruby">
+
+```ruby
+# TODO
+```
+
+  </TabItem>
+
+  <TabItem value="python" label="Python">
+
+```python
+# TODO
+```
+
+  </TabItem>
+
+  <TabItem value="php" label="PHP">
+
+```php
+// TODO
+```
+
+  </TabItem>
+</Tabs>

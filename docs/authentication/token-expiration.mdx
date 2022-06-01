@@ -1,0 +1,110 @@
+---
+description: Handling expired access tokens.
+---
+
+# Token Expiration
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+You should write your applications to anticipate the possibility that a granted
+token may no longer work. Access tokens are short-lived but they are issued with
+a single-use, long-lived refresh token that can be used to get new tokens.
+Applications can use the [refresh token grant][refreshtoken]  of the
+[OAuth2 specification][oauth2] to obtain additional access tokens in order to
+prolong the application's access to a user's data.
+
+[oauth2]: http://oauth.net/2/
+[refreshtoken]: http://tools.ietf.org/html/rfc6749#section-6
+
+:::info
+
+**Refresh tokens are not issued by Application-Only Flow**. Tokens that your
+application obtains from the [Application-Only Flow](./application-only-authentication-flow.mdx)
+will not include a refresh token. Your application must authenticate to get new
+access tokens with this flow.
+
+:::
+
+## 1. Obtain an access token
+
+Use the [User-Login Authentication Flow](./user-login-authentication-flow.mdx)
+to obtain an initial access token.
+
+## 2. Use the refresh token to obtain a new access token
+
+The refresh token from the previous access token can be exchanged for new one.
+
+### Request
+
+<Tabs>
+  <TabItem value="curl" label="curl" default>
+
+```bash
+curl -X POST "https://account.stubhub.com/oauth2/token"
+  -u "clientId:clientSecret" --basic
+  -H "Content-Type: application/x-www-form-urlencoded"
+  -d "grant_type=refresh_token"
+  -d "refresh_token=REFRESH_TOKEN"
+  --data-urlencode "scope=read:sellerlistings write:sellerlistings"
+```
+
+  </TabItem>
+  <TabItem value="csharp" label="C#">
+
+```csharp
+var token = await _StubHubClient.OAuth2.RefreshAccessTokenAsync(oldToken);
+```
+
+  </TabItem>
+  <TabItem value="ruby" label="Ruby">
+
+```ruby
+# TODO
+```
+
+  </TabItem>
+
+  <TabItem value="python" label="Python">
+
+```python
+# TODO
+```
+
+  </TabItem>
+
+  <TabItem value="php" label="PHP">
+
+```php
+// TODO
+```
+
+  </TabItem>
+</Tabs>
+
+### Headers
+
+| **Name** | **Value** |
+| -------- | --------- |
+| `Authorization` | Basic {value from step 1} |
+| `Content-Type` | `application/x-www-form-urlencoded` |
+
+### Parameters
+
+| **Name** | **Type** | **Description** |
+| -------- | -------- | --------------- |
+| `grant_type` | `string` | *Required*. Value should be `refresh_token` |
+| `refresh_token` | `string` | The refresh token received with a previous access token |
+| `scope` | `string` | Space-delimited string of the [scopes](./scopes.md) you would like |
+
+### Response
+
+```json
+{
+  "access_token": "03807cb390319329bdf6c777d4dfae9c0d3b3c35",
+  "token_type": "bearer",
+  "expires_in": 3600,
+  "refresh_token": "2YotnFZFEjr1zCsicMWpAA",
+  "scope": "read:sellerlistings write:sellerlistings"
+}
+```

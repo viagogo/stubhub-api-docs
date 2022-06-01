@@ -1,0 +1,41 @@
+name: Sync OpenApi Definitions
+
+on:
+  schedule:
+    # At the end of every day
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+
+jobs:
+  sync:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Sync Account API spec
+        run: curl -o static/openapi/account.json https://api.viagogo.net/v2/openapi/account.json
+
+      - name: Sync Catalog API spec
+        run: curl -o static/openapi/catalog.json https://api.viagogo.net/catalog/openapi/openapi.json
+
+      - name: Sync Inventory API spec
+        run: curl -o static/openapi/inventory.json https://api.viagogo.net/v2/openapi/inventory.json
+
+      - name: Sync Sales API spec
+        run: curl -o static/openapi/sales.json https://api.viagogo.net/v2/openapi/sales.json
+
+      - name: Sync Webhooks API spec
+        run: curl -o static/openapi/webhooks.json https://api.viagogo.net/v2/openapi/webhooks.json
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          title: "Sync latest changes to OpenAPI definitions"
+          body: "Automated changes by `.github/workflows/sync-openapi-definitions.yml`"
+          reviewers: "akilburge"
+          branch: "sync-openapi-definitions/patch"
+          delete-branch: true
