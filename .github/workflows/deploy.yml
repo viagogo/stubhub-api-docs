@@ -22,10 +22,6 @@ jobs:
         run: npm ci
 
       - name: Build
-        env:
-          ALGOLIA_APP_ID: ${{ secrets.ALGOLIA_APP_ID }}
-          ALOGOLIA_SEARCH_API_KEY: ${{ secrets.ALOGOLIA_SEARCH_API_KEY }}
-          ALGOLIA_INDEX_NAME: ${{ secrets.ALGOLIA_INDEX_NAME }}
         run: npm run build
 
       - name: Deploy
