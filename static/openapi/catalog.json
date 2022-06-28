@@ -2,7 +2,7 @@
   "openapi": "3.0.0",
   "info": {
     "title": "StubHub Catalog API",
-    "version": "1.0.0.29",
+    "version": "1.0.0.31",
     "x-logo": {
       "url": "https://img.vggcdn.net/images/Assets/Icons/bfx/stubhub-logo-merch-purple-mweb.440b3765.svg",
       "backgroundColor": "#222222"
@@ -91,6 +91,72 @@
                 }
               }
             }
+          },
+          "403": {
+            "$ref": "#/components/responses/forbidden",
+            "description": null
+          },
+          "401": {
+            "$ref": "#/components/responses/requires_authentication",
+            "description": null
+          },
+          "500": {
+            "$ref": "#/components/responses/internal_server_error",
+            "description": null
+          }
+        },
+        "security": [
+          {
+            "OAuth2": [
+              "read:events"
+            ]
+          }
+        ]
+      }
+    },
+    "/catalog/events/external_mappings/{platform}/{externalEventId}": {
+      "get": {
+        "tags": [
+          "Events"
+        ],
+        "summary": "Get an event on the StubHub platform using an identifier from an external platform.",
+        "operationId": "Events_GetEventByExternalEventId",
+        "parameters": [
+          {
+            "name": "platform",
+            "in": "path",
+            "required": true,
+            "description": "The name of the external platform. Can be `legacy_stubhub`",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "externalEventId",
+            "in": "path",
+            "required": true,
+            "description": "The event identifier from the external platform.",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Event"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/not_found",
+            "description": null
           },
           "403": {
             "$ref": "#/components/responses/forbidden",
