@@ -2873,6 +2873,11 @@
             "description": "The localized note.",
             "nullable": true
           },
+          "type": {
+            "type": "string",
+            "description": "The listing note type name. Can be `Information`, `Perk`, `Defect` and `RestrictionOnUse`.",
+            "nullable": true
+          },
           "_links": {
             "nullable": true,
             "oneOf": [

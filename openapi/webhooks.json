@@ -672,6 +672,14 @@
         "description": "Triggered when something happens that affects a sale (e.g. you sell one or more tickets).",
         "additionalProperties": false,
         "properties": {
+          "barcodes": {
+            "type": "array",
+            "description": "The barcodes that are linked to the sale.",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/BarcodeInformation"
+            }
+          },
           "topic": {
             "type": "string",
             "description": "The topic of the webhook.",
@@ -700,6 +708,42 @@
           }
         }
       },
+      "BarcodeInformation": {
+        "type": "object",
+        "description": "A set of barcodes for a seat.",
+        "additionalProperties": false,
+        "properties": {
+          "seat_ordinal": {
+            "type": "integer",
+            "description": "An ordinal number for a seat.",
+            "format": "int32",
+            "nullable": true
+          },
+          "seat": {
+            "type": "string",
+            "description": "Seat number.",
+            "nullable": true
+          },
+          "row": {
+            "type": "string",
+            "description": "Row of ticket.",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "description": "Status of the barcode. Can be `Received` or `FailedValidation`",
+            "nullable": true
+          },
+          "barcode_values": {
+            "type": "array",
+            "description": "Barcode(s) values for this seat.",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
       "SalesTopicLinks": {
         "title": "SalesTopicLinks",
         "type": "object",
@@ -718,14 +762,6 @@
         "title": "SalesTopicEmbeddedResources",
         "type": "object",
         "properties": {
-          "barcodes": {
-            "type": "array",
-            "description": "The barcodes that are linked to the sale.",
-            "nullable": true,
-            "items": {
-              "$ref": "#/components/schemas/BarcodeInformation"
-            }
-          },
           "event": {
             "description": "The event for this sale.",
             "nullable": true,
@@ -770,42 +806,6 @@
                 "$ref": "#/components/schemas/Webhook"
               }
             ]
-          }
-        }
-      },
-      "BarcodeInformation": {
-        "type": "object",
-        "description": "A set of barcodes for a seat.",
-        "additionalProperties": false,
-        "properties": {
-          "seat_ordinal": {
-            "type": "integer",
-            "description": "An ordinal number for a seat.",
-            "format": "int32",
-            "nullable": true
-          },
-          "seat": {
-            "type": "string",
-            "description": "Seat number.",
-            "nullable": true
-          },
-          "row": {
-            "type": "string",
-            "description": "Row of ticket.",
-            "nullable": true
-          },
-          "status": {
-            "type": "string",
-            "description": "Status of the barcode. Can be `Received` or `FailedValidation`",
-            "nullable": true
-          },
-          "barcode_values": {
-            "type": "array",
-            "description": "Barcode(s) values for this seat.",
-            "nullable": true,
-            "items": {
-              "type": "string"
-            }
           }
         }
       },
@@ -1212,6 +1212,14 @@
         "description": "Triggered when a provisional sale occurs. The normal `SalesTopic` webhook will confirm the provisional sale. If you want to reject the provisional sale, ignore it and reject the sale when it comes through as normal.",
         "additionalProperties": false,
         "properties": {
+          "barcodes": {
+            "type": "array",
+            "description": "The barcodes that are linked to the sale.",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/BarcodeInformation"
+            }
+          },
           "topic": {
             "type": "string",
             "description": "The topic of the webhook.",
@@ -1258,14 +1266,6 @@
         "title": "ProvisionalSaleTopicEmbeddedResources",
         "type": "object",
         "properties": {
-          "barcodes": {
-            "type": "array",
-            "description": "The barcodes that are linked to the sale.",
-            "nullable": true,
-            "items": {
-              "$ref": "#/components/schemas/BarcodeInformation"
-            }
-          },
           "event": {
             "description": "The event for this sale.",
             "nullable": true,
@@ -1318,6 +1318,14 @@
         "description": "Triggered when a provisional sale is cancelled.",
         "additionalProperties": false,
         "properties": {
+          "barcodes": {
+            "type": "array",
+            "description": "The barcodes that are linked to the sale.",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/BarcodeInformation"
+            }
+          },
           "topic": {
             "type": "string",
             "description": "The topic of the webhook.",
@@ -1364,14 +1372,6 @@
         "title": "CancelProvisionalSaleTopicEmbeddedResources",
         "type": "object",
         "properties": {
-          "barcodes": {
-            "type": "array",
-            "description": "The barcodes that are linked to the sale.",
-            "nullable": true,
-            "items": {
-              "$ref": "#/components/schemas/BarcodeInformation"
-            }
-          },
           "event": {
             "description": "The event for this sale.",
             "nullable": true,
@@ -1424,6 +1424,14 @@
         "description": "Triggered when an update is made to a sale that you did not initiate. You will need to filter by the action that you are interested in. The currently support action is `FailedBarcodeValidation` which will tell you if validation of a set of barcodes uploaded against an order has failed, and barcodes need re-uploading.",
         "additionalProperties": false,
         "properties": {
+          "barcodes": {
+            "type": "array",
+            "description": "The barcodes that are linked to the sale.",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/BarcodeInformation"
+            }
+          },
           "topic": {
             "type": "string",
             "description": "The topic of the webhook.",
@@ -1470,14 +1478,6 @@
         "title": "SaleUpdatesTopicEmbeddedResources",
         "type": "object",
         "properties": {
-          "barcodes": {
-            "type": "array",
-            "description": "The barcodes that are linked to the sale.",
-            "nullable": true,
-            "items": {
-              "$ref": "#/components/schemas/BarcodeInformation"
-            }
-          },
           "event": {
             "description": "The event for this sale.",
             "nullable": true,
@@ -1540,6 +1540,14 @@
             "description": "The action that trigger this webhook. Can be `FailedBarcodeValidation` or `ListingDeliverabilityExpired`",
             "nullable": true
           },
+          "barcodes": {
+            "type": "array",
+            "description": "The barcodes that are linked to the listing.",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/BarcodeInformation2"
+            }
+          },
           "_links": {
             "nullable": true,
             "oneOf": [
@@ -1553,70 +1561,6 @@
             "oneOf": [
               {
                 "$ref": "#/components/schemas/SellerListingUpdatesTopicEmbeddedResources"
-              }
-            ]
-          }
-        }
-      },
-      "SellerListingUpdatesTopicLinks": {
-        "title": "SellerListingUpdatesTopicLinks",
-        "type": "object",
-        "properties": {
-          "self": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/Link"
-              }
-            ]
-          }
-        }
-      },
-      "SellerListingUpdatesTopicEmbeddedResources": {
-        "title": "SellerListingUpdatesTopicEmbeddedResources",
-        "type": "object",
-        "properties": {
-          "barcodes": {
-            "type": "array",
-            "description": "The barcodes that are linked to the listing.",
-            "nullable": true,
-            "items": {
-              "$ref": "#/components/schemas/BarcodeInformation2"
-            }
-          },
-          "event": {
-            "description": "The event for this listing.",
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/EmbeddedEvent"
-              }
-            ]
-          },
-          "seller_listing": {
-            "description": "The affected listing.",
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/EmbeddedSellerListing"
-              }
-            ]
-          },
-          "venue": {
-            "description": "The venue where the event is taking place.",
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/EmbeddedVenue"
-              }
-            ]
-          },
-          "webhook": {
-            "description": "The subscribed webhook.",
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/Webhook"
               }
             ]
           }
@@ -1655,6 +1599,62 @@
             "items": {
               "type": "string"
             }
+          }
+        }
+      },
+      "SellerListingUpdatesTopicLinks": {
+        "title": "SellerListingUpdatesTopicLinks",
+        "type": "object",
+        "properties": {
+          "self": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Link"
+              }
+            ]
+          }
+        }
+      },
+      "SellerListingUpdatesTopicEmbeddedResources": {
+        "title": "SellerListingUpdatesTopicEmbeddedResources",
+        "type": "object",
+        "properties": {
+          "event": {
+            "description": "The event for this listing.",
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/EmbeddedEvent"
+              }
+            ]
+          },
+          "seller_listing": {
+            "description": "The affected listing.",
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/EmbeddedSellerListing"
+              }
+            ]
+          },
+          "venue": {
+            "description": "The venue where the event is taking place.",
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/EmbeddedVenue"
+              }
+            ]
+          },
+          "webhook": {
+            "description": "The subscribed webhook.",
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Webhook"
+              }
+            ]
           }
         }
       },
@@ -1927,6 +1927,14 @@
                 "description": "Triggered when something happens that affects a sale (e.g. you sell one or more tickets).",
                 "additionalProperties": false,
                 "properties": {
+                  "barcodes": {
+                    "type": "array",
+                    "description": "The barcodes that are linked to the sale.",
+                    "nullable": true,
+                    "items": {
+                      "$ref": "#/components/schemas/BarcodeInformation"
+                    }
+                  },
                   "topic": {
                     "type": "string",
                     "description": "The topic of the webhook.",
@@ -1996,6 +2004,14 @@
                 "description": "Triggered when a provisional sale occurs. The normal `SalesTopic` webhook will confirm the provisional sale. If you want to reject the provisional sale, ignore it and reject the sale when it comes through as normal.",
                 "additionalProperties": false,
                 "properties": {
+                  "barcodes": {
+                    "type": "array",
+                    "description": "The barcodes that are linked to the sale.",
+                    "nullable": true,
+                    "items": {
+                      "$ref": "#/components/schemas/BarcodeInformation"
+                    }
+                  },
                   "topic": {
                     "type": "string",
                     "description": "The topic of the webhook.",
@@ -2065,6 +2081,14 @@
                 "description": "Triggered when a provisional sale is cancelled.",
                 "additionalProperties": false,
                 "properties": {
+                  "barcodes": {
+                    "type": "array",
+                    "description": "The barcodes that are linked to the sale.",
+                    "nullable": true,
+                    "items": {
+                      "$ref": "#/components/schemas/BarcodeInformation"
+                    }
+                  },
                   "topic": {
                     "type": "string",
                     "description": "The topic of the webhook.",
@@ -2134,6 +2158,14 @@
                 "description": "Triggered when an update is made to a sale that you did not initiate. You will need to filter by the action that you are interested in. The currently support action is `FailedBarcodeValidation` which will tell you if validation of a set of barcodes uploaded against an order has failed, and barcodes need re-uploading.",
                 "additionalProperties": false,
                 "properties": {
+                  "barcodes": {
+                    "type": "array",
+                    "description": "The barcodes that are linked to the sale.",
+                    "nullable": true,
+                    "items": {
+                      "$ref": "#/components/schemas/BarcodeInformation"
+                    }
+                  },
                   "topic": {
                     "type": "string",
                     "description": "The topic of the webhook.",
@@ -2212,6 +2244,14 @@
                     "type": "string",
                     "description": "The action that trigger this webhook. Can be `FailedBarcodeValidation` or `ListingDeliverabilityExpired`",
                     "nullable": true
+                  },
+                  "barcodes": {
+                    "type": "array",
+                    "description": "The barcodes that are linked to the listing.",
+                    "nullable": true,
+                    "items": {
+                      "$ref": "#/components/schemas/BarcodeInformation2"
+                    }
                   },
                   "_links": {
                     "nullable": true,
