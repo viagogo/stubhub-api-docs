@@ -5,9 +5,10 @@ tags: [migration, new-api]
 
 # Migrating to a New API
 
-We are migrating to a new API to help you tap into the world's largest ticket marketplace and build
-amazing apps and experiences. View the [new documentation][new-docs-link] or
-[Contact Us][contact-us-link] to find out more.
+We are migrating to a new API to help you tap into the world's largest ticket marketplace and build amazing applications and experiences. To get access, please contact one of the email addresses below:
 
-[new-docs-link]: https://developer.stubhub.com/docs/overview/introduction
-[contact-us-link]: mailto:API.Support@stubhub.com
+If you are building something that helps buyers find tickets to purchase, please email affiliates@stubhub.com with a brief description of your app, your approximate volume, and our technical team will help you get access to the API and documentation.
+
+If you are building something that helps sellers sell their tickets on Stubhub, please email api@stubhub.com with a brief description of your app, your approximate volume, and our technical team will help you get access to the API and documentation.
+
+Please note – we are experiencing high volumes of requests for API support, and will be prioritizing requests based on the number of customers affected by the support request. We will do our best to get back to you as soon as possible.
