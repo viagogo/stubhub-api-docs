@@ -12,10 +12,8 @@
             <link>https://developer.stubhub.com/blog/2022/05/31/migrating-to-new-api</link>
             <guid>/2022/05/31/migrating-to-new-api</guid>
             <pubDate>Tue, 31 May 2022 00:00:00 GMT</pubDate>
-            <description><![CDATA[We are migrating to a new API to help you tap into the world's largest ticket marketplace and build]]></description>
-            <content:encoded><![CDATA[<p>We are migrating to a new API to help you tap into the world&#x27;s largest ticket marketplace and build
-amazing apps and experiences. View the <a href="https://developer.stubhub.com/docs/overview/introduction">new documentation</a> or
-<a href="mailto:API.Support@stubhub.com">Contact Us</a> to find out more.</p>]]></content:encoded>
+            <description><![CDATA[We are migrating to a new API to help you tap into the world's largest ticket marketplace and build amazing applications and experiences. To get access, please contact one of the email addresses below:]]></description>
+            <content:encoded><![CDATA[<p>We are migrating to a new API to help you tap into the world&#x27;s largest ticket marketplace and build amazing applications and experiences. To get access, please contact one of the email addresses below:</p><p>If you are building something that helps buyers find tickets to purchase, please email <a href="mailto:affiliates@stubhub.com">affiliates@stubhub.com</a> with a brief description of your app, your approximate volume, and our technical team will help you get access to the API and documentation.</p><p>If you are building something that helps sellers sell their tickets on Stubhub, please email <a href="mailto:api@stubhub.com">api@stubhub.com</a> with a brief description of your app, your approximate volume, and our technical team will help you get access to the API and documentation.</p><p>Please note – we are experiencing high volumes of requests for API support, and will be prioritizing requests based on the number of customers affected by the support request. We will do our best to get back to you as soon as possible.</p>]]></content:encoded>
         </item>
     </channel>
 </rss>
