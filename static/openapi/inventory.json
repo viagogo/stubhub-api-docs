@@ -3262,7 +3262,7 @@
             ]
           },
           "seating": {
-            "description": "The seating information for the ticket(s) in this listing.",
+            "description": "The seating information for the ticket(s) in this listing. For PATCH Requests, you need to pass in all the fields of a Seating to update, even when you only need to update some of the fields. Otherwise the rest of the fields will be set to empty. ",
             "nullable": true,
             "oneOf": [
               {
@@ -3717,7 +3717,7 @@
             ]
           },
           "seating": {
-            "description": "The seating information for the ticket(s) in this listing.",
+            "description": "The seating information for the ticket(s) in this listing. For PATCH Requests, you need to pass in all the fields of a Seating to update, even when you only need to update some of the fields. Otherwise the rest of the fields will be set to empty. ",
             "nullable": true,
             "oneOf": [
               {
@@ -3907,7 +3907,7 @@
             ]
           },
           "seating": {
-            "description": "The seating information for the ticket(s) in this listing.",
+            "description": "The seating information for the ticket(s) in this listing. For PATCH Requests, you need to pass in all the fields of a Seating to update, even when you only need to update some of the fields. Otherwise the rest of the fields will be set to empty. ",
             "nullable": true,
             "oneOf": [
               {
@@ -4141,7 +4141,7 @@
             ]
           },
           "seating": {
-            "description": "The seating information for the ticket(s) in this listing.",
+            "description": "The seating information for the ticket(s) in this listing. For PATCH Requests, you need to pass in all the fields of a Seating to update, even when you only need to update some of the fields. Otherwise the rest of the fields will be set to empty. ",
             "nullable": true,
             "oneOf": [
               {
@@ -4332,7 +4332,7 @@
             ]
           },
           "seating": {
-            "description": "The seating information for the ticket(s) in this listing.",
+            "description": "The seating information for the ticket(s) in this listing. For PATCH Requests, you need to pass in all the fields of a Seating to update, even when you only need to update some of the fields. Otherwise the rest of the fields will be set to empty. ",
             "nullable": true,
             "oneOf": [
               {
