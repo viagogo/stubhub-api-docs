@@ -2,7 +2,7 @@
   "openapi": "3.0.0",
   "info": {
     "title": "StubHub Catalog API",
-    "version": "1.0.0.31",
+    "version": "1.0.0.33",
     "x-logo": {
       "url": "https://img.vggcdn.net/images/Assets/Icons/bfx/stubhub-logo-merch-purple-mweb.440b3765.svg",
       "backgroundColor": "#222222"
@@ -94,6 +94,114 @@
           },
           "403": {
             "$ref": "#/components/responses/forbidden",
+            "description": null
+          },
+          "401": {
+            "$ref": "#/components/responses/requires_authentication",
+            "description": null
+          },
+          "500": {
+            "$ref": "#/components/responses/internal_server_error",
+            "description": null
+          }
+        },
+        "security": [
+          {
+            "OAuth2": [
+              "read:events"
+            ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Events"
+        ],
+        "summary": "List events by event ids.",
+        "description": "List a specified set of events on the StubHub platform.",
+        "operationId": "Events_PutEvents",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Specifies which page of data to retrieve.",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "Set custom page sizes on response.",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "updated_since",
+            "in": "query",
+            "description": "Filters the response to only return items that have been updated since the given timestamp",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "Determines the ordering of items. A comma-separated string containing `resource_version`.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "min_resource_version",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "nullable": true
+            }
+          },
+          {
+            "name": "country_code",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "description": "Filters results to only include events located in the specified country."
+            }
+          }
+        ],
+        "requestBody": {
+          "x-name": "body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PutEventsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Events"
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/forbidden",
+            "description": null
+          },
+          "400": {
+            "$ref": "#/components/responses/validation_failed",
             "description": null
           },
           "401": {
@@ -741,7 +849,7 @@
             "description": "The categories for this event.",
             "nullable": true,
             "items": {
-              "$ref": "#/components/schemas/EmbeddedCategory"
+              "$ref": "#/components/schemas/EventCategory"
             }
           },
           "external_mappings": {
@@ -767,6 +875,108 @@
             "oneOf": [
               {
                 "$ref": "#/components/schemas/EmbeddedVenue"
+              }
+            ]
+          }
+        }
+      },
+      "EventCategory": {
+        "type": "object",
+        "description": "A Category represents a grouping of events or other categories. Examples are “Concerts”, “Rock and Pop” and “Lady Gaga”.",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "The category identifier.",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the category."
+          },
+          "role": {
+            "type": "string",
+            "description": "The role of the category for a particular event. Can be `MainArtist`, `SupportingArtist`, `HomeTeam`, `AwayTeam`, `Tournament`, `HeadlineAct`, `StandardAct`, `Festival`, `SportsLeague`, `ConcertTour`.",
+            "nullable": true
+          },
+          "_links": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/EventCategoryLinks"
+              }
+            ]
+          },
+          "_embedded": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/EventCategoryEmbeddedResources"
+              }
+            ]
+          }
+        }
+      },
+      "EventCategoryLinks": {
+        "title": "EventCategoryLinks",
+        "type": "object",
+        "properties": {
+          "self": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Link"
+              }
+            ]
+          }
+        }
+      },
+      "EventCategoryEmbeddedResources": {
+        "title": "EventCategoryEmbeddedResources",
+        "type": "object",
+        "properties": {
+          "external_mappings": {
+            "type": "array",
+            "description": "The external mappings for this category",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/EmbeddedExternalMapping"
+            }
+          }
+        }
+      },
+      "EmbeddedExternalMapping": {
+        "type": "object",
+        "description": "An external mapping between a resource on the StubHub platform and the same resource on another platforms. ",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The identifier of the resource in the external platform"
+          },
+          "platform_name": {
+            "type": "string",
+            "description": "The name of the external platform. Can be `legacy_stubhub`."
+          },
+          "_links": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/EmbeddedExternalMappingLinks"
+              }
+            ]
+          }
+        }
+      },
+      "EmbeddedExternalMappingLinks": {
+        "title": "EmbeddedExternalMappingLinks",
+        "type": "object",
+        "properties": {
+          "self": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Link"
               }
             ]
           }
@@ -829,43 +1039,6 @@
             "items": {
               "$ref": "#/components/schemas/EmbeddedExternalMapping"
             }
-          }
-        }
-      },
-      "EmbeddedExternalMapping": {
-        "type": "object",
-        "description": "An external mapping between a resource on the StubHub platform and the same resource on another platforms. ",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "The identifier of the resource in the external platform"
-          },
-          "platform_name": {
-            "type": "string",
-            "description": "The name of the external platform. Can be `legacy_stubhub`."
-          },
-          "_links": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/EmbeddedExternalMappingLinks"
-              }
-            ]
-          }
-        }
-      },
-      "EmbeddedExternalMappingLinks": {
-        "title": "EmbeddedExternalMappingLinks",
-        "type": "object",
-        "properties": {
-          "self": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/Link"
-              }
-            ]
           }
         }
       },
@@ -1015,6 +1188,20 @@
               "items": {
                 "type": "string"
               }
+            }
+          }
+        }
+      },
+      "PutEventsRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "event_ids": {
+            "type": "array",
+            "description": "The StubHub event identifiers of the events to be retrieved.",
+            "items": {
+              "type": "integer",
+              "format": "int32"
             }
           }
         }
