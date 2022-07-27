@@ -2105,7 +2105,7 @@
             "nullable": true,
             "oneOf": [
               {
-                "$ref": "#/components/schemas/Seating"
+                "$ref": "#/components/schemas/SeatingDetail"
               }
             ]
           },
@@ -2114,7 +2114,7 @@
             "nullable": true,
             "oneOf": [
               {
-                "$ref": "#/components/schemas/Seating"
+                "$ref": "#/components/schemas/SeatingDetail"
               }
             ]
           },
@@ -2232,9 +2232,8 @@
           }
         }
       },
-      "Seating": {
+      "SeatingDetail": {
         "type": "object",
-        "description": "Represents the seating information for a ticket(s) in a Venue.",
         "additionalProperties": false,
         "required": [
           "section"
@@ -2259,8 +2258,49 @@
             "type": "string",
             "description": "The last in a contiguous block of seats to which the tickets have been allocated.",
             "nullable": true
+          },
+          "mapping_status": {
+            "description": "This field indicates whether the listing's seating is mapped to a venue's corresponding section.",
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/MappingStatus"
+              }
+            ]
           }
         }
+      },
+      "MappingStatus": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "description": "This field indicates whether the seating is mapped, currently only mapped and unmapped is used.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/MappingStatusEnum"
+              }
+            ]
+          }
+        }
+      },
+      "MappingStatusEnum": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "Unknown",
+          "Mapped",
+          "Unmapped",
+          "Ignored",
+          "Rejected"
+        ],
+        "enum": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ]
       },
       "Money": {
         "type": "object",
@@ -3393,6 +3433,36 @@
             "items": {
               "$ref": "#/components/schemas/BarcodeInformation2"
             }
+          }
+        }
+      },
+      "Seating": {
+        "type": "object",
+        "description": "Represents the seating information for a ticket(s) in a Venue.",
+        "additionalProperties": false,
+        "required": [
+          "section"
+        ],
+        "properties": {
+          "section": {
+            "type": "string",
+            "description": "The section of the ticket(s).",
+            "nullable": true
+          },
+          "row": {
+            "type": "string",
+            "description": "The row of the ticket(s).",
+            "nullable": true
+          },
+          "seat_from": {
+            "type": "string",
+            "description": "The first in a contiguous block of seats to which the tickets have been allocated.",
+            "nullable": true
+          },
+          "seat_to": {
+            "type": "string",
+            "description": "The last in a contiguous block of seats to which the tickets have been allocated.",
+            "nullable": true
           }
         }
       },
