@@ -61,15 +61,14 @@
             "content": {
               "application/hal+json": {
                 "schema": {
-                  "nullable": true,
-                  "oneOf": [
-                    {
-                      "$ref": "#/components/schemas/Webhooks"
-                    }
-                  ]
+                  "$ref": "#/components/schemas/Webhooks"
                 }
               }
             }
+          },
+          "404": {
+            "$ref": "#/components/responses/not_found",
+            "description": null
           },
           "403": {
             "$ref": "#/components/responses/forbidden",
@@ -448,14 +447,6 @@
             ]
           },
           "prev": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/Link"
-              }
-            ]
-          },
-          "webhook:create": {
             "nullable": true,
             "oneOf": [
               {
@@ -848,6 +839,14 @@
             "description": "True if the event start and end date have been confirmed; Otherwise, false.",
             "nullable": true
           },
+          "merged_events": {
+            "type": "array",
+            "description": "The list of event ids that are merged into this event.",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/MergedEntity"
+            }
+          },
           "_links": {
             "nullable": true,
             "oneOf": [
@@ -855,6 +854,18 @@
                 "$ref": "#/components/schemas/EmbeddedEventLinks"
               }
             ]
+          }
+        }
+      },
+      "MergedEntity": {
+        "type": "object",
+        "description": "An entity that has been merged into another entity.",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "The identifier for this entity.",
+            "format": "int32"
           }
         }
       },
@@ -1021,7 +1032,7 @@
             "nullable": true,
             "oneOf": [
               {
-                "$ref": "#/components/schemas/Seating"
+                "$ref": "#/components/schemas/SeatingDetail"
               }
             ]
           },
@@ -1030,7 +1041,7 @@
             "nullable": true,
             "oneOf": [
               {
-                "$ref": "#/components/schemas/Seating"
+                "$ref": "#/components/schemas/SeatingDetail"
               }
             ]
           },
@@ -1050,6 +1061,54 @@
                 "$ref": "#/components/schemas/EmbeddedSellerListingLinks"
               }
             ]
+          }
+        }
+      },
+      "SeatingDetail": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "section"
+        ],
+        "properties": {
+          "section": {
+            "type": "string",
+            "description": "The section of the ticket(s).",
+            "nullable": true
+          },
+          "row": {
+            "type": "string",
+            "description": "The row of the ticket(s).",
+            "nullable": true
+          },
+          "seat_from": {
+            "type": "string",
+            "description": "The first in a contiguous block of seats to which the tickets have been allocated.",
+            "nullable": true
+          },
+          "seat_to": {
+            "type": "string",
+            "description": "The last in a contiguous block of seats to which the tickets have been allocated.",
+            "nullable": true
+          },
+          "state": {
+            "description": "This field indicates whether the listing's seating is visible on the website on the venue map.",
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/SeatingState"
+              }
+            ]
+          }
+        }
+      },
+      "SeatingState": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "visible_in_venue_map": {
+            "type": "boolean",
+            "description": "True when the seat is visible in the venue map that will be shown to buyers; Otherwise, false."
           }
         }
       },

@@ -512,6 +512,60 @@
             ]
           }
         ]
+      },
+      "post": {
+        "tags": [
+          "E-Tickets"
+        ],
+        "summary": "Upload and save e-tickets for a sale",
+        "operationId": "ETicket_PostSaleETickets",
+        "parameters": [
+          {
+            "name": "saleId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Sale"
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/forbidden",
+            "description": null
+          },
+          "400": {
+            "$ref": "#/components/responses/validation_failed",
+            "description": null
+          },
+          "401": {
+            "$ref": "#/components/responses/requires_authentication",
+            "description": null
+          },
+          "500": {
+            "$ref": "#/components/responses/internal_server_error",
+            "description": null
+          }
+        },
+        "security": [
+          {
+            "OAuth2": [
+              "write:user",
+              "write:sales"
+            ]
+          }
+        ]
       }
     },
     "/sales/{saleId}/etickets/{eticketId}": {
@@ -593,15 +647,14 @@
             "content": {
               "application/hal+json": {
                 "schema": {
-                  "nullable": true,
-                  "oneOf": [
-                    {
-                      "$ref": "#/components/schemas/Sales"
-                    }
-                  ]
+                  "$ref": "#/components/schemas/Sales"
                 }
               }
             }
+          },
+          "404": {
+            "$ref": "#/components/responses/not_found",
+            "description": null
           },
           "403": {
             "$ref": "#/components/responses/forbidden",
@@ -677,15 +730,14 @@
             "content": {
               "application/hal+json": {
                 "schema": {
-                  "nullable": true,
-                  "oneOf": [
-                    {
-                      "$ref": "#/components/schemas/Sales"
-                    }
-                  ]
+                  "$ref": "#/components/schemas/Sales"
                 }
               }
             }
+          },
+          "404": {
+            "$ref": "#/components/responses/not_found",
+            "description": null
           },
           "403": {
             "$ref": "#/components/responses/forbidden",
@@ -887,49 +939,21 @@
         "summary": "List payments",
         "description": "Lists payments for the authenticated user.",
         "operationId": "Payments_GetPayments",
-        "parameters": [
-          {
-            "name": "page",
-            "in": "query",
-            "description": "Specifies which page of data to retrieve.",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "page_size",
-            "in": "query",
-            "description": "Set custom page sizes on response.",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "sort",
-            "in": "query",
-            "description": "Determines the ordering of items. A comma-separated string containing `created_at`, or`id`.",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "",
             "content": {
-              "application/hal+json": {
+              "application/octet-stream": {
                 "schema": {
-                  "nullable": true,
-                  "oneOf": [
-                    {
-                      "$ref": "#/components/schemas/Payments"
-                    }
-                  ]
+                  "type": "string",
+                  "format": "binary"
                 }
               }
             }
+          },
+          "404": {
+            "$ref": "#/components/responses/not_found",
+            "description": null
           },
           "403": {
             "$ref": "#/components/responses/forbidden",
@@ -2373,102 +2397,6 @@
           }
         }
       },
-      "Sales": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "total_items": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "page": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "page_size": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "_links": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/SalesLinks"
-              }
-            ]
-          },
-          "_embedded": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/SalesEmbeddedResources"
-              }
-            ]
-          }
-        }
-      },
-      "SalesLinks": {
-        "title": "SalesLinks",
-        "type": "object",
-        "properties": {
-          "self": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/Link"
-              }
-            ]
-          },
-          "first": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/Link"
-              }
-            ]
-          },
-          "last": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/Link"
-              }
-            ]
-          },
-          "next": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/Link"
-              }
-            ]
-          },
-          "prev": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/Link"
-              }
-            ]
-          }
-        }
-      },
-      "SalesEmbeddedResources": {
-        "title": "SalesEmbeddedResources",
-        "type": "object",
-        "properties": {
-          "items": {
-            "type": "array",
-            "nullable": true,
-            "items": {
-              "$ref": "#/components/schemas/Sale"
-            }
-          }
-        }
-      },
       "Sale": {
         "type": "object",
         "description": "A sale on the StubHub marketplace that belongs to the currently authenticated user.",
@@ -2923,6 +2851,14 @@
             "description": "True if the event start and end date have been confirmed; Otherwise, false.",
             "nullable": true
           },
+          "merged_events": {
+            "type": "array",
+            "description": "The list of event ids that are merged into this event.",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/MergedEntity"
+            }
+          },
           "_links": {
             "nullable": true,
             "oneOf": [
@@ -2930,6 +2866,18 @@
                 "$ref": "#/components/schemas/EmbeddedEventLinks"
               }
             ]
+          }
+        }
+      },
+      "MergedEntity": {
+        "type": "object",
+        "description": "An entity that has been merged into another entity.",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "The identifier for this entity.",
+            "format": "int32"
           }
         }
       },
@@ -3069,6 +3017,102 @@
                 "$ref": "#/components/schemas/Country"
               }
             ]
+          }
+        }
+      },
+      "Sales": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "total_items": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "page_size": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "_links": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/SalesLinks"
+              }
+            ]
+          },
+          "_embedded": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/SalesEmbeddedResources"
+              }
+            ]
+          }
+        }
+      },
+      "SalesLinks": {
+        "title": "SalesLinks",
+        "type": "object",
+        "properties": {
+          "self": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Link"
+              }
+            ]
+          },
+          "first": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Link"
+              }
+            ]
+          },
+          "last": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Link"
+              }
+            ]
+          },
+          "next": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Link"
+              }
+            ]
+          },
+          "prev": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Link"
+              }
+            ]
+          }
+        }
+      },
+      "SalesEmbeddedResources": {
+        "title": "SalesEmbeddedResources",
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/Sale"
+            }
           }
         }
       },
@@ -3313,102 +3357,6 @@
           "message_body": {
             "type": "string",
             "nullable": true
-          }
-        }
-      },
-      "Payments": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "total_items": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "page": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "page_size": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "_links": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/PaymentsLinks"
-              }
-            ]
-          },
-          "_embedded": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/PaymentsEmbeddedResources"
-              }
-            ]
-          }
-        }
-      },
-      "PaymentsLinks": {
-        "title": "PaymentsLinks",
-        "type": "object",
-        "properties": {
-          "self": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/Link"
-              }
-            ]
-          },
-          "first": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/Link"
-              }
-            ]
-          },
-          "last": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/Link"
-              }
-            ]
-          },
-          "next": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/Link"
-              }
-            ]
-          },
-          "prev": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/Link"
-              }
-            ]
-          }
-        }
-      },
-      "PaymentsEmbeddedResources": {
-        "title": "PaymentsEmbeddedResources",
-        "type": "object",
-        "properties": {
-          "items": {
-            "type": "array",
-            "nullable": true,
-            "items": {
-              "$ref": "#/components/schemas/Payment"
-            }
           }
         }
       },
@@ -4043,11 +3991,6 @@
       "x-displayName": "Payment"
     },
     {
-      "name": "Resource_Payments",
-      "description": "\n<SchemaDefinition schemaRef=\"#/components/schemas/Payments\" showReadOnly={true} showWriteOnly={true} />",
-      "x-displayName": "Payments"
-    },
-    {
       "name": "Resource_Sale",
       "description": "A sale on the StubHub marketplace that belongs to the currently authenticated user.\n<SchemaDefinition schemaRef=\"#/components/schemas/Sale\" showReadOnly={true} showWriteOnly={true} />",
       "x-displayName": "Sale"
@@ -4107,7 +4050,6 @@
         "Resource_ETickets",
         "Resource_ETicketUploads",
         "Resource_Payment",
-        "Resource_Payments",
         "Resource_Sale",
         "Resource_Sales",
         "Resource_Shipment",
