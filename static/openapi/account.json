@@ -61,15 +61,14 @@
             "content": {
               "application/hal+json": {
                 "schema": {
-                  "nullable": true,
-                  "oneOf": [
-                    {
-                      "$ref": "#/components/schemas/Addresses"
-                    }
-                  ]
+                  "$ref": "#/components/schemas/Addresss"
                 }
               }
             }
+          },
+          "404": {
+            "$ref": "#/components/responses/not_found",
+            "description": null
           },
           "403": {
             "$ref": "#/components/responses/forbidden",
@@ -365,15 +364,14 @@
             "content": {
               "application/hal+json": {
                 "schema": {
-                  "nullable": true,
-                  "oneOf": [
-                    {
-                      "$ref": "#/components/schemas/PaymentMethods"
-                    }
-                  ]
+                  "$ref": "#/components/schemas/PaymentMethodss"
                 }
               }
             }
+          },
+          "404": {
+            "$ref": "#/components/responses/not_found",
+            "description": null
           },
           "403": {
             "$ref": "#/components/responses/forbidden",
@@ -553,15 +551,14 @@
             "content": {
               "application/hal+json": {
                 "schema": {
-                  "nullable": true,
-                  "oneOf": [
-                    {
-                      "$ref": "#/components/schemas/User"
-                    }
-                  ]
+                  "$ref": "#/components/schemas/User"
                 }
               }
             }
+          },
+          "404": {
+            "$ref": "#/components/responses/not_found",
+            "description": null
           },
           "403": {
             "$ref": "#/components/responses/forbidden",
@@ -646,9 +643,8 @@
   },
   "components": {
     "schemas": {
-      "Addresses": {
+      "Addresss": {
         "type": "object",
-        "description": "The Addresses resource is a collection resource that contains zero or\nmore references to a set of addresses, and links that guide you on ways\nto interact with the addresses. The collection offers a paginated view\nof addresses.",
         "additionalProperties": false,
         "properties": {
           "total_items": {
@@ -670,7 +666,7 @@
             "nullable": true,
             "oneOf": [
               {
-                "$ref": "#/components/schemas/AddressesLinks"
+                "$ref": "#/components/schemas/AddresssLinks"
               }
             ]
           },
@@ -678,26 +674,17 @@
             "nullable": true,
             "oneOf": [
               {
-                "$ref": "#/components/schemas/AddressesEmbeddedResources"
+                "$ref": "#/components/schemas/AddresssEmbeddedResources"
               }
             ]
           }
         }
       },
-      "AddressesLinks": {
-        "title": "AddressesLinks",
+      "AddresssLinks": {
+        "title": "AddresssLinks",
         "type": "object",
         "properties": {
           "self": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/Link"
-              }
-            ]
-          },
-          "address:create": {
-            "description": "Add a new address for the current user.",
             "nullable": true,
             "oneOf": [
               {
@@ -756,8 +743,8 @@
           }
         }
       },
-      "AddressesEmbeddedResources": {
-        "title": "AddressesEmbeddedResources",
+      "AddresssEmbeddedResources": {
+        "title": "AddresssEmbeddedResources",
         "type": "object",
         "properties": {
           "items": {
@@ -1074,6 +1061,102 @@
             "type": "string",
             "description": "The 2 character ISO code that identifies the country in which the address is located.",
             "nullable": true
+          }
+        }
+      },
+      "PaymentMethodss": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "total_items": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "page_size": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "_links": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/PaymentMethodssLinks"
+              }
+            ]
+          },
+          "_embedded": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/PaymentMethodssEmbeddedResources"
+              }
+            ]
+          }
+        }
+      },
+      "PaymentMethodssLinks": {
+        "title": "PaymentMethodssLinks",
+        "type": "object",
+        "properties": {
+          "self": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Link"
+              }
+            ]
+          },
+          "first": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Link"
+              }
+            ]
+          },
+          "last": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Link"
+              }
+            ]
+          },
+          "next": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Link"
+              }
+            ]
+          },
+          "prev": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Link"
+              }
+            ]
+          }
+        }
+      },
+      "PaymentMethodssEmbeddedResources": {
+        "title": "PaymentMethodssEmbeddedResources",
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/PaymentMethods"
+            }
           }
         }
       },
@@ -1647,9 +1730,9 @@
       "x-displayName": "Address"
     },
     {
-      "name": "Resource_Addresses",
-      "description": "The Addresses resource is a collection resource that contains zero or\nmore references to a set of addresses, and links that guide you on ways\nto interact with the addresses. The collection offers a paginated view\nof addresses.\n<SchemaDefinition schemaRef=\"#/components/schemas/Addresses\" showReadOnly={true} showWriteOnly={true} />",
-      "x-displayName": "Addresses"
+      "name": "Resource_Addresss",
+      "description": "\n<SchemaDefinition schemaRef=\"#/components/schemas/Addresss\" showReadOnly={true} showWriteOnly={true} />",
+      "x-displayName": "Addresss"
     },
     {
       "name": "Resource_PaymentMethod",
@@ -1660,6 +1743,11 @@
       "name": "Resource_PaymentMethods",
       "description": "The PaymentMethods resource is a collection resource that contains zero\nor more references to a set of payment methods, and links that guide you\non ways to interact with the payment methods. The collection offers a\npaginated view of payment methods.\n<SchemaDefinition schemaRef=\"#/components/schemas/PaymentMethods\" showReadOnly={true} showWriteOnly={true} />",
       "x-displayName": "PaymentMethods"
+    },
+    {
+      "name": "Resource_PaymentMethodss",
+      "description": "\n<SchemaDefinition schemaRef=\"#/components/schemas/PaymentMethodss\" showReadOnly={true} showWriteOnly={true} />",
+      "x-displayName": "PaymentMethodss"
     },
     {
       "name": "Resource_User",
@@ -1683,9 +1771,10 @@
       "name": "Resources",
       "tags": [
         "Resource_Address",
-        "Resource_Addresses",
+        "Resource_Addresss",
         "Resource_PaymentMethod",
         "Resource_PaymentMethods",
+        "Resource_PaymentMethodss",
         "Resource_User"
       ]
     }
