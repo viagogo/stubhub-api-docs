@@ -1932,11 +1932,6 @@
       "x-displayName": "Money"
     },
     {
-      "name": "BasicType_Seating",
-      "description": "Represents the seating information for a ticket(s) in a Venue.\n<SchemaDefinition schemaRef=\"#/components/schemas/Seating\" showReadOnly={true} showWriteOnly={true} />",
-      "x-displayName": "Seating"
-    },
-    {
       "name": "Resource_Webhook",
       "description": "A webhook is a subscription from a server application to certain topics\non the StubHub platform. When an occurrence of a topic is triggered,\nwe’ll POST a payload to the webhook’s configured url.\n<SchemaDefinition schemaRef=\"#/components/schemas/Webhook\" showReadOnly={true} showWriteOnly={true} />",
       "x-displayName": "Webhook"
@@ -2421,8 +2416,7 @@
     {
       "name": "Basic Types",
       "tags": [
-        "BasicType_Money",
-        "BasicType_Seating"
+        "BasicType_Money"
       ]
     },
     {

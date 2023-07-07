@@ -3464,12 +3464,6 @@
               "format": "int32"
             }
           },
-          "relist_transaction_id": {
-            "type": "integer",
-            "description": "Used when relisting tickets previously purchased on Stubhub marketplace. Include the transaction ID in the id value field.",
-            "format": "int32",
-            "nullable": true
-          },
           "external_event_information": {
             "type": "array",
             "description": "Information about the listing's event on other platforms.",
@@ -3962,12 +3956,6 @@
               "type": "integer",
               "format": "int32"
             }
-          },
-          "relist_transaction_id": {
-            "type": "integer",
-            "description": "Used when relisting tickets previously purchased on Stubhub marketplace. Include the transaction ID in the id value field.",
-            "format": "int32",
-            "nullable": true
           },
           "external_event_information": {
             "type": "array",
@@ -6238,11 +6226,6 @@
       "x-displayName": "Money"
     },
     {
-      "name": "BasicType_Seating",
-      "description": "Represents the seating information for a ticket(s) in a Venue.\n<SchemaDefinition schemaRef=\"#/components/schemas/Seating\" showReadOnly={true} showWriteOnly={true} />",
-      "x-displayName": "Seating"
-    },
-    {
       "name": "E-Tickets"
     },
     {
@@ -6333,8 +6316,7 @@
     {
       "name": "Basic Types",
       "tags": [
-        "BasicType_Money",
-        "BasicType_Seating"
+        "BasicType_Money"
       ]
     },
     {

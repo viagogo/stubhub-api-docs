@@ -3965,11 +3965,6 @@
       "x-displayName": "Money"
     },
     {
-      "name": "BasicType_Seating",
-      "description": "Represents the seating information for a ticket(s) in a Venue.\n<SchemaDefinition schemaRef=\"#/components/schemas/Seating\" showReadOnly={true} showWriteOnly={true} />",
-      "x-displayName": "Seating"
-    },
-    {
       "name": "E-Tickets"
     },
     {
@@ -4040,8 +4035,7 @@
     {
       "name": "Basic Types",
       "tags": [
-        "BasicType_Money",
-        "BasicType_Seating"
+        "BasicType_Money"
       ]
     },
     {
