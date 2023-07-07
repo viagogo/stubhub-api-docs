@@ -2,7 +2,7 @@
   "openapi": "3.0.0",
   "info": {
     "title": "StubHub Catalog API",
-    "version": "1.0.0.33",
+    "version": "1.0.0.62",
     "x-logo": {
       "url": "https://img.vggcdn.net/images/Assets/Icons/bfx/stubhub-logo-merch-purple-mweb.440b3765.svg",
       "backgroundColor": "#222222"
@@ -79,6 +79,55 @@
               "type": "string",
               "description": "Filters results to only include events located in the specified country."
             }
+          },
+          {
+            "name": "latitude",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "description": "When provided with longitude and distance filters events returned to ones within the specified distance of the lat/long.",
+              "format": "double",
+              "nullable": true
+            }
+          },
+          {
+            "name": "longitude",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "description": "When provided with latitude and distance filters events returned to ones within the specified distance of the lat/long.",
+              "format": "double",
+              "nullable": true
+            }
+          },
+          {
+            "name": "max_distance_in_meters",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "description": "When provided with latitude and longitude filters events returned to ones within the specified distance of the lat/long.",
+              "format": "int32",
+              "nullable": true
+            }
+          },
+          {
+            "name": "genre_id",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "description": "Filters results to only include events for the specified genre id.",
+              "format": "int32",
+              "nullable": true
+            }
+          },
+          {
+            "name": "exclude_parking_passes",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "description": "Filters results to remove parking passes",
+              "nullable": true
+            }
           }
         ],
         "responses": {
@@ -118,8 +167,8 @@
           "Events"
         ],
         "summary": "List events by event ids.",
-        "description": "List a specified set of events on the StubHub platform.",
-        "operationId": "Events_PutEvents",
+        "description": "List a specified set of events on the StubHub platform. Note that the eventID being passed can already be merged with another event. And in this case, details of the new event will be returned, if a different eventId is returned then it means that the event has been merged with the returned event. Also inside _embedded field of the response, a mapping between the original eventId and new eventId will be provided. ",
+        "operationId": "Events_GetEventsByEventIds",
         "parameters": [
           {
             "name": "page",
@@ -172,6 +221,55 @@
               "type": "string",
               "description": "Filters results to only include events located in the specified country."
             }
+          },
+          {
+            "name": "latitude",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "description": "When provided with longitude and distance filters events returned to ones within the specified distance of the lat/long.",
+              "format": "double",
+              "nullable": true
+            }
+          },
+          {
+            "name": "longitude",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "description": "When provided with latitude and distance filters events returned to ones within the specified distance of the lat/long.",
+              "format": "double",
+              "nullable": true
+            }
+          },
+          {
+            "name": "max_distance_in_meters",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "description": "When provided with latitude and longitude filters events returned to ones within the specified distance of the lat/long.",
+              "format": "int32",
+              "nullable": true
+            }
+          },
+          {
+            "name": "genre_id",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "description": "Filters results to only include events for the specified genre id.",
+              "format": "int32",
+              "nullable": true
+            }
+          },
+          {
+            "name": "exclude_parking_passes",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "description": "Filters results to remove parking passes",
+              "nullable": true
+            }
           }
         ],
         "requestBody": {
@@ -202,6 +300,159 @@
           },
           "400": {
             "$ref": "#/components/responses/validation_failed",
+            "description": null
+          },
+          "401": {
+            "$ref": "#/components/responses/requires_authentication",
+            "description": null
+          },
+          "500": {
+            "$ref": "#/components/responses/internal_server_error",
+            "description": null
+          }
+        },
+        "security": [
+          {
+            "OAuth2": [
+              "read:events"
+            ]
+          }
+        ]
+      }
+    },
+    "/catalog/categories/{categoryId}/events": {
+      "get": {
+        "tags": [
+          "Events"
+        ],
+        "summary": "List events by category id.",
+        "description": "List set of events filtered by category id on the StubHub platform. ",
+        "operationId": "Events_GetEventsByCategoryId",
+        "parameters": [
+          {
+            "name": "categoryId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Specifies which page of data to retrieve.",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "Set custom page sizes on response.",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "updated_since",
+            "in": "query",
+            "description": "Filters the response to only return items that have been updated since the given timestamp",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "Determines the ordering of items. A comma-separated string containing `resource_version`.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "min_resource_version",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "nullable": true
+            }
+          },
+          {
+            "name": "country_code",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "description": "Filters results to only include events located in the specified country."
+            }
+          },
+          {
+            "name": "latitude",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "description": "When provided with longitude and distance filters events returned to ones within the specified distance of the lat/long.",
+              "format": "double",
+              "nullable": true
+            }
+          },
+          {
+            "name": "longitude",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "description": "When provided with latitude and distance filters events returned to ones within the specified distance of the lat/long.",
+              "format": "double",
+              "nullable": true
+            }
+          },
+          {
+            "name": "max_distance_in_meters",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "description": "When provided with latitude and longitude filters events returned to ones within the specified distance of the lat/long.",
+              "format": "int32",
+              "nullable": true
+            }
+          },
+          {
+            "name": "genre_id",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "description": "Filters results to only include events for the specified genre id.",
+              "format": "int32",
+              "nullable": true
+            }
+          },
+          {
+            "name": "exclude_parking_passes",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "description": "Filters results to remove parking passes",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Events"
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/forbidden",
             "description": null
           },
           "401": {
@@ -294,6 +545,7 @@
           "Events"
         ],
         "summary": "Get an event",
+        "description": "Note that the eventID being passed can already be merged with another event. And in this case, details of the new event will be returned, if a different eventId is returned then it means that the event has been merged with the returned event. Also inside _embedded field of the response, a mapping between the original eventId and new eventId will be provided.",
         "operationId": "Events_GetEvent",
         "parameters": [
           {
@@ -422,6 +674,55 @@
             "schema": {
               "type": "string",
               "description": "Filters results to only include events located in the specified country."
+            }
+          },
+          {
+            "name": "latitude",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "description": "When provided with longitude and distance filters events returned to ones within the specified distance of the lat/long.",
+              "format": "double",
+              "nullable": true
+            }
+          },
+          {
+            "name": "longitude",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "description": "When provided with latitude and distance filters events returned to ones within the specified distance of the lat/long.",
+              "format": "double",
+              "nullable": true
+            }
+          },
+          {
+            "name": "max_distance_in_meters",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "description": "When provided with latitude and longitude filters events returned to ones within the specified distance of the lat/long.",
+              "format": "int32",
+              "nullable": true
+            }
+          },
+          {
+            "name": "genre_id",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "description": "Filters results to only include events for the specified genre id.",
+              "format": "int32",
+              "nullable": true
+            }
+          },
+          {
+            "name": "exclude_parking_passes",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "description": "Filters results to remove parking passes",
+              "nullable": true
             }
           }
         ],
@@ -869,6 +1170,14 @@
               }
             ]
           },
+          "merged_events": {
+            "type": "array",
+            "description": "The events that have been merged into this event.",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/MergedEntity"
+            }
+          },
           "venue": {
             "description": "The venue where the event is taking place.",
             "nullable": true,
@@ -942,6 +1251,14 @@
             "items": {
               "$ref": "#/components/schemas/EmbeddedExternalMapping"
             }
+          },
+          "merged_categories": {
+            "type": "array",
+            "description": "The categories that have been merged into this category.",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/MergedEntity"
+            }
           }
         }
       },
@@ -979,6 +1296,18 @@
                 "$ref": "#/components/schemas/Link"
               }
             ]
+          }
+        }
+      },
+      "MergedEntity": {
+        "type": "object",
+        "description": "An entity that has been merged into another entity.",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "The identifier for this entity.",
+            "format": "int32"
           }
         }
       },
@@ -1038,6 +1367,14 @@
             "nullable": true,
             "items": {
               "$ref": "#/components/schemas/EmbeddedExternalMapping"
+            }
+          },
+          "merged_categories": {
+            "type": "array",
+            "description": "The categories that have been merged into this category.",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/MergedEntity"
             }
           }
         }

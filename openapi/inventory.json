@@ -1901,6 +1901,77 @@
             ]
           }
         ]
+      },
+      "post": {
+        "tags": [
+          "E-Tickets"
+        ],
+        "summary": "Upload and save e-tickets for a seller listing",
+        "operationId": "ETicket_PostListingETickets",
+        "parameters": [
+          {
+            "name": "listingId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Specifies which page of data to retrieve.",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "Set custom page sizes on response.",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ETickets"
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/forbidden",
+            "description": null
+          },
+          "400": {
+            "$ref": "#/components/responses/validation_failed",
+            "description": null
+          },
+          "401": {
+            "$ref": "#/components/responses/requires_authentication",
+            "description": null
+          },
+          "500": {
+            "$ref": "#/components/responses/internal_server_error",
+            "description": null
+          }
+        },
+        "security": [
+          {
+            "OAuth2": [
+              "write:sellerlistings"
+            ]
+          }
+        ]
       }
     },
     "/sellerlistings/{listingId}/etickets/{ETicketId}": {
@@ -2105,7 +2176,7 @@
             "nullable": true,
             "oneOf": [
               {
-                "$ref": "#/components/schemas/Seating"
+                "$ref": "#/components/schemas/SeatingDetail"
               }
             ]
           },
@@ -2114,7 +2185,7 @@
             "nullable": true,
             "oneOf": [
               {
-                "$ref": "#/components/schemas/Seating"
+                "$ref": "#/components/schemas/SeatingDetail"
               }
             ]
           },
@@ -2232,9 +2303,8 @@
           }
         }
       },
-      "Seating": {
+      "SeatingDetail": {
         "type": "object",
-        "description": "Represents the seating information for a ticket(s) in a Venue.",
         "additionalProperties": false,
         "required": [
           "section"
@@ -2259,6 +2329,25 @@
             "type": "string",
             "description": "The last in a contiguous block of seats to which the tickets have been allocated.",
             "nullable": true
+          },
+          "state": {
+            "description": "This field indicates whether the listing's seating is visible on the website on the venue map.",
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/SeatingState"
+              }
+            ]
+          }
+        }
+      },
+      "SeatingState": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "visible_in_venue_map": {
+            "type": "boolean",
+            "description": "True when the seat is visible in the venue map that will be shown to buyers; Otherwise, false."
           }
         }
       },
@@ -3074,6 +3163,14 @@
             "description": "True if the event start and end date have been confirmed; Otherwise, false.",
             "nullable": true
           },
+          "merged_events": {
+            "type": "array",
+            "description": "The list of event ids that are merged into this event.",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/MergedEntity"
+            }
+          },
           "_links": {
             "nullable": true,
             "oneOf": [
@@ -3081,6 +3178,18 @@
                 "$ref": "#/components/schemas/EmbeddedEventLinks"
               }
             ]
+          }
+        }
+      },
+      "MergedEntity": {
+        "type": "object",
+        "description": "An entity that has been merged into another entity.",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "The identifier for this entity.",
+            "format": "int32"
           }
         }
       },
@@ -3266,7 +3375,7 @@
             "nullable": true,
             "oneOf": [
               {
-                "$ref": "#/components/schemas/Seating"
+                "$ref": "#/components/schemas/SeatingRequest"
               }
             ]
           },
@@ -3396,6 +3505,41 @@
           }
         }
       },
+      "SeatingRequest": {
+        "type": "object",
+        "description": "Represents the seating information for a ticket(s) in a Venue.",
+        "additionalProperties": false,
+        "required": [
+          "section"
+        ],
+        "properties": {
+          "section": {
+            "type": "string",
+            "description": "The section of the ticket(s).",
+            "nullable": true
+          },
+          "row": {
+            "type": "string",
+            "description": "The row of the ticket(s).",
+            "nullable": true
+          },
+          "seat_from": {
+            "type": "string",
+            "description": "The first in a contiguous block of seats to which the tickets have been allocated.",
+            "nullable": true
+          },
+          "seat_to": {
+            "type": "string",
+            "description": "The last in a contiguous block of seats to which the tickets have been allocated.",
+            "nullable": true
+          },
+          "hide_seat_details": {
+            "type": "boolean",
+            "description": "Do not display seats pre-purchase. May affect listing visibility in some regions.",
+            "nullable": true
+          }
+        }
+      },
       "Reservation": {
         "type": "object",
         "description": "Reservation details of a sale or a listing.",
@@ -3486,6 +3630,9 @@
           "pcid": {
             "type": "string",
             "nullable": true
+          },
+          "hide_seat_details": {
+            "type": "boolean"
           }
         }
       },
@@ -3721,7 +3868,7 @@
             "nullable": true,
             "oneOf": [
               {
-                "$ref": "#/components/schemas/Seating"
+                "$ref": "#/components/schemas/SeatingRequest"
               }
             ]
           },
@@ -3911,7 +4058,7 @@
             "nullable": true,
             "oneOf": [
               {
-                "$ref": "#/components/schemas/Seating"
+                "$ref": "#/components/schemas/SeatingRequest"
               }
             ]
           },
@@ -3999,6 +4146,12 @@
               "type": "integer",
               "format": "int32"
             }
+          },
+          "relist_transaction_id": {
+            "type": "integer",
+            "description": "Used when relisting tickets previously purchased on Stubhub marketplace. Include the transaction ID in the id value field.",
+            "format": "int32",
+            "nullable": true
           },
           "external_event_information": {
             "type": "array",
@@ -4145,7 +4298,7 @@
             "nullable": true,
             "oneOf": [
               {
-                "$ref": "#/components/schemas/Seating"
+                "$ref": "#/components/schemas/SeatingRequest"
               }
             ]
           },
@@ -4233,6 +4386,12 @@
               "type": "integer",
               "format": "int32"
             }
+          },
+          "relist_transaction_id": {
+            "type": "integer",
+            "description": "Used when relisting tickets previously purchased on Stubhub marketplace. Include the transaction ID in the id value field.",
+            "format": "int32",
+            "nullable": true
           },
           "external_event_information": {
             "type": "array",
@@ -4336,7 +4495,7 @@
             "nullable": true,
             "oneOf": [
               {
-                "$ref": "#/components/schemas/Seating"
+                "$ref": "#/components/schemas/SeatingRequest"
               }
             ]
           },
@@ -4424,6 +4583,12 @@
               "type": "integer",
               "format": "int32"
             }
+          },
+          "relist_transaction_id": {
+            "type": "integer",
+            "description": "Used when relisting tickets previously purchased on Stubhub marketplace. Include the transaction ID in the id value field.",
+            "format": "int32",
+            "nullable": true
           },
           "external_event_information": {
             "type": "array",
@@ -4635,10 +4800,13 @@
             "description": "True if the event start and end date have been confirmed; Otherwise, false.",
             "nullable": true
           },
-          "lms": {
-            "type": "boolean",
-            "description": "True if the event is a last minute sale event; otherwise, false.",
-            "nullable": true
+          "merged_events": {
+            "type": "array",
+            "description": "The list of event ids that are merged into this event.",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/MergedEntity"
+            }
           },
           "_links": {
             "nullable": true,
@@ -4647,6 +4815,11 @@
                 "$ref": "#/components/schemas/SellerEventLinks"
               }
             ]
+          },
+          "lms": {
+            "type": "boolean",
+            "description": "True if the event is a last minute sale event; otherwise, false.",
+            "nullable": true
           },
           "_embedded": {
             "nullable": true,
@@ -4796,6 +4969,28 @@
                 "$ref": "#/components/schemas/SalesAggregateLinks"
               }
             ]
+          }
+        }
+      },
+      "StateInformation": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
           }
         }
       },
@@ -5498,28 +5693,6 @@
           }
         }
       },
-      "StateInformation": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "name": {
-            "type": "string",
-            "nullable": true
-          },
-          "title": {
-            "type": "string",
-            "nullable": true
-          },
-          "description": {
-            "type": "string",
-            "nullable": true
-          }
-        }
-      },
       "PatchShipmentRequest": {
         "type": "object",
         "additionalProperties": false,
@@ -6053,11 +6226,6 @@
       "x-displayName": "Money"
     },
     {
-      "name": "BasicType_Seating",
-      "description": "Represents the seating information for a ticket(s) in a Venue.\n<SchemaDefinition schemaRef=\"#/components/schemas/Seating\" showReadOnly={true} showWriteOnly={true} />",
-      "x-displayName": "Seating"
-    },
-    {
       "name": "E-Tickets"
     },
     {
@@ -6148,8 +6316,7 @@
     {
       "name": "Basic Types",
       "tags": [
-        "BasicType_Money",
-        "BasicType_Seating"
+        "BasicType_Money"
       ]
     },
     {
