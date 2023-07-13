@@ -2734,6 +2734,14 @@
               "$ref": "#/components/schemas/ListingNote"
             }
           },
+          "relist_transaction": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/RelistTransaction"
+              }
+            ]
+          },
           "split_type": {
             "description": "The way that the ticket(s) are allowed to be split up when sold.",
             "nullable": true,
@@ -3204,6 +3212,17 @@
                 "$ref": "#/components/schemas/Link"
               }
             ]
+          }
+        }
+      },
+      "RelistTransaction": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
           }
         }
       },
