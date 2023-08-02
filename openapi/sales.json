@@ -3174,6 +3174,15 @@
             "description": "Tacking number of the ticket shipment.",
             "nullable": true
           },
+          "seating": {
+            "description": "Any updated seating information about the tickets sold",
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Seating"
+              }
+            ]
+          },
           "barcodes": {
             "type": "array",
             "description": "The barcode(s) for the ticket(s).",
@@ -3181,6 +3190,11 @@
             "items": {
               "$ref": "#/components/schemas/BarcodeInformation2"
             }
+          },
+          "mobile_provider": {
+            "type": "string",
+            "description": "The vendor being used to transfer the mobile ticket.  Can be one of the following values:\nStubHub,\nTicketMaster,\nTicketmasterCa,\nAXS,\nEventbrite,\nLivenation,\nBroadway,\nTelecharge,\nTicketon,\nSeetickets,\nEtix,\nTixr,\nFesticket,\nInsomniac,\nDiceImport,\nMGMResorts,\nTickeri,\nSmithCenterImport,\nStubwire,\nComputicket,",
+            "nullable": true
           }
         }
       },
