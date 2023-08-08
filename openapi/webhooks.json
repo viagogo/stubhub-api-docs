@@ -1778,6 +1778,112 @@
             ]
           }
         }
+      },
+      "ReTransferTicketTopic": {
+        "type": "object",
+        "description": "Triggered when a ticket was not received by the buyer, so the ticket must be re-transferred from the 3rd party provider.",
+        "additionalProperties": false,
+        "properties": {
+          "barcodes": {
+            "type": "array",
+            "description": "The barcodes that are linked to the sale.",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/BarcodeInformation"
+            }
+          },
+          "topic": {
+            "type": "string",
+            "description": "The topic of the webhook.",
+            "nullable": true
+          },
+          "action": {
+            "type": "string",
+            "description": "The action that triggered this webhook. ",
+            "nullable": true
+          },
+          "_links": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ReTransferTicketTopicLinks"
+              }
+            ]
+          },
+          "_embedded": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ReTransferTicketTopicEmbeddedResources"
+              }
+            ]
+          }
+        }
+      },
+      "ReTransferTicketTopicLinks": {
+        "title": "ReTransferTicketTopicLinks",
+        "type": "object",
+        "properties": {
+          "self": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Link"
+              }
+            ]
+          }
+        }
+      },
+      "ReTransferTicketTopicEmbeddedResources": {
+        "title": "ReTransferTicketTopicEmbeddedResources",
+        "type": "object",
+        "properties": {
+          "event": {
+            "description": "The event for this sale.",
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/EmbeddedEvent"
+              }
+            ]
+          },
+          "sale": {
+            "description": "The affected sale.",
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/EmbeddedSale"
+              }
+            ]
+          },
+          "seller_listing": {
+            "description": "The listing from which the tickets were sold.",
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/EmbeddedSellerListing"
+              }
+            ]
+          },
+          "venue": {
+            "description": "The venue where the event is taking place.",
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/EmbeddedVenue"
+              }
+            ]
+          },
+          "webhook": {
+            "description": "The subscribed webhook.",
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Webhook"
+              }
+            ]
+          }
+        }
       }
     },
     "responses": {
@@ -2389,6 +2495,83 @@
                     "oneOf": [
                       {
                         "$ref": "#/components/schemas/PingTopicEmbeddedResources"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The data was received successfully."
+          }
+        }
+      }
+    },
+    "re-transfer-ticket": {
+      "post": {
+        "tags": [
+          "Topics"
+        ],
+        "summary": "ReTransferTicket",
+        "description": "Triggered when a ticket was not received by the buyer, so the ticket must be re-transferred from the 3rd party provider.",
+        "parameters": [
+          {
+            "description": "Name of the topic that triggered this delivery",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Ping"
+          },
+          {
+            "description": "Unique identifier for this delivery",
+            "schema": {
+              "type": "string"
+            },
+            "example": "1993433"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "Triggered when a ticket was not received by the buyer, so the ticket must be re-transferred from the 3rd party provider.",
+                "additionalProperties": false,
+                "properties": {
+                  "barcodes": {
+                    "type": "array",
+                    "description": "The barcodes that are linked to the sale.",
+                    "nullable": true,
+                    "items": {
+                      "$ref": "#/components/schemas/BarcodeInformation"
+                    }
+                  },
+                  "topic": {
+                    "type": "string",
+                    "description": "The topic of the webhook.",
+                    "nullable": true
+                  },
+                  "action": {
+                    "type": "string",
+                    "description": "The action that triggered this webhook. ",
+                    "nullable": true
+                  },
+                  "_links": {
+                    "nullable": true,
+                    "oneOf": [
+                      {
+                        "$ref": "#/components/schemas/ReTransferTicketTopicLinks"
+                      }
+                    ]
+                  },
+                  "_embedded": {
+                    "nullable": true,
+                    "oneOf": [
+                      {
+                        "$ref": "#/components/schemas/ReTransferTicketTopicEmbeddedResources"
                       }
                     ]
                   }
