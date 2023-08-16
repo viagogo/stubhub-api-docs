@@ -2,7 +2,7 @@
   "openapi": "3.0.0",
   "info": {
     "title": "StubHub Catalog API",
-    "version": "1.0.0.62",
+    "version": "1.0.0.66",
     "x-logo": {
       "url": "https://img.vggcdn.net/images/Assets/Icons/bfx/stubhub-logo-merch-purple-mweb.440b3765.svg",
       "backgroundColor": "#222222"
@@ -19,6 +19,93 @@
     }
   ],
   "paths": {
+    "/catalog/categories/search": {
+      "get": {
+        "tags": [
+          "Categories"
+        ],
+        "summary": "Search categories",
+        "description": "Search for categories on the StubHub platform. Use this endpoint to search the entire StubHub category catalog with your application.",
+        "operationId": "Categories_SearchCategories",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "description": "The query text to be used to match categories.",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Specifies which page of data to retrieve.",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "Set custom page sizes on response.",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "updated_since",
+            "in": "query",
+            "description": "Filters the response to only return items that have been updated since the given timestamp",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "Determines the ordering of items. A comma-separated string containing `resource_version`.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Categories"
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/forbidden",
+            "description": null
+          },
+          "401": {
+            "$ref": "#/components/responses/requires_authentication",
+            "description": null
+          },
+          "500": {
+            "$ref": "#/components/responses/internal_server_error",
+            "description": null
+          }
+        },
+        "security": [
+          {
+            "OAuth2": [
+              "read:categories"
+            ]
+          }
+        ]
+      }
+    },
     "/catalog/events": {
       "get": {
         "tags": [
@@ -759,6 +846,160 @@
         ]
       }
     },
+    "/catalog/categories/{categoryId}/allevents": {
+      "get": {
+        "tags": [
+          "Events"
+        ],
+        "summary": "Get all events under a CategoryId",
+        "description": "Finds all CategoryIds under the parents, and finds all events under all of them- de-duped by storing in a HashSet.",
+        "operationId": "Events_GetAllEventsByCategoryId",
+        "parameters": [
+          {
+            "name": "categoryId",
+            "in": "path",
+            "required": true,
+            "description": "CategoryId for which we want all events",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Specifies which page of data to retrieve.",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "Set custom page sizes on response.",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "updated_since",
+            "in": "query",
+            "description": "Filters the response to only return items that have been updated since the given timestamp",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "Determines the ordering of items. A comma-separated string containing `resource_version`.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "min_resource_version",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "nullable": true
+            }
+          },
+          {
+            "name": "country_code",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "description": "Filters results to only include events located in the specified country."
+            }
+          },
+          {
+            "name": "latitude",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "description": "When provided with longitude and distance filters events returned to ones within the specified distance of the lat/long.",
+              "format": "double",
+              "nullable": true
+            }
+          },
+          {
+            "name": "longitude",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "description": "When provided with latitude and distance filters events returned to ones within the specified distance of the lat/long.",
+              "format": "double",
+              "nullable": true
+            }
+          },
+          {
+            "name": "max_distance_in_meters",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "description": "When provided with latitude and longitude filters events returned to ones within the specified distance of the lat/long.",
+              "format": "int32",
+              "nullable": true
+            }
+          },
+          {
+            "name": "genre_id",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "description": "Filters results to only include events for the specified genre id.",
+              "format": "int32",
+              "nullable": true
+            }
+          },
+          {
+            "name": "exclude_parking_passes",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "description": "Filters results to remove parking passes",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Events"
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/forbidden",
+            "description": null
+          },
+          "401": {
+            "$ref": "#/components/responses/requires_authentication",
+            "description": null
+          },
+          "500": {
+            "$ref": "#/components/responses/internal_server_error",
+            "description": null
+          }
+        },
+        "security": [
+          {
+            "OAuth2": [
+              "read:events"
+            ]
+          }
+        ]
+      }
+    },
     "/catalog/venues": {
       "get": {
         "tags": [
@@ -904,6 +1145,194 @@
   },
   "components": {
     "schemas": {
+      "Categories": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "total_items": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "page_size": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "_links": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/CategoriesLinks"
+              }
+            ]
+          },
+          "_embedded": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/CategoriesEmbeddedResources"
+              }
+            ]
+          }
+        }
+      },
+      "CategoriesLinks": {
+        "title": "CategoriesLinks",
+        "type": "object",
+        "properties": {
+          "self": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Link"
+              }
+            ]
+          },
+          "first": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Link"
+              }
+            ]
+          },
+          "last": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Link"
+              }
+            ]
+          },
+          "next": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Link"
+              }
+            ]
+          },
+          "prev": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Link"
+              }
+            ]
+          }
+        }
+      },
+      "Link": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "href": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "templated": {
+            "type": "boolean"
+          }
+        }
+      },
+      "CategoriesEmbeddedResources": {
+        "title": "CategoriesEmbeddedResources",
+        "type": "object",
+        "properties": {
+          "deleted_items": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/Category"
+            }
+          },
+          "items": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/Category"
+            }
+          }
+        }
+      },
+      "Category": {
+        "type": "object",
+        "description": "An category on the StubHub platform.",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "The category identifier.",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the category."
+          },
+          "_links": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/CategoryLinks"
+              }
+            ]
+          }
+        }
+      },
+      "CategoryLinks": {
+        "title": "CategoryLinks",
+        "type": "object",
+        "properties": {
+          "self": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Link"
+              }
+            ]
+          },
+          "category:webpage": {
+            "description": "The url of the category.",
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Link"
+              }
+            ]
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "errors": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
       "Events": {
         "type": "object",
         "additionalProperties": false,
@@ -984,23 +1413,6 @@
                 "$ref": "#/components/schemas/Link"
               }
             ]
-          }
-        }
-      },
-      "Link": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "href": {
-            "type": "string",
-            "nullable": true
-          },
-          "title": {
-            "type": "string",
-            "nullable": true
-          },
-          "templated": {
-            "type": "boolean"
           }
         }
       },
@@ -1508,27 +1920,6 @@
           }
         }
       },
-      "Error": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "code": {
-            "type": "string"
-          },
-          "message": {
-            "type": "string"
-          },
-          "errors": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
-          }
-        }
-      },
       "PutEventsRequest": {
         "type": "object",
         "additionalProperties": false,
@@ -1880,6 +2271,7 @@
   "security": [
     {
       "OAuth2": [
+        "read:categories",
         "read:events",
         "read:venues"
       ]
@@ -1892,8 +2284,17 @@
       "x-displayName": "Money"
     },
     {
+      "name": "Categories",
+      "description": "View categories on the StubHub platform"
+    },
+    {
       "name": "Events",
       "description": "View events on the StubHub platform"
+    },
+    {
+      "name": "Resource_Categories",
+      "description": "\n<SchemaDefinition schemaRef=\"#/components/schemas/Categories\" showReadOnly={true} showWriteOnly={true} />",
+      "x-displayName": "Categories"
     },
     {
       "name": "Resource_Event",
@@ -1924,6 +2325,7 @@
     {
       "name": "Endpoints",
       "tags": [
+        "Categories",
         "Events",
         "Venues"
       ]
@@ -1937,6 +2339,7 @@
     {
       "name": "Resources",
       "tags": [
+        "Resource_Categories",
         "Resource_Event",
         "Resource_Events",
         "Resource_Venue",
