@@ -3621,35 +3621,6 @@
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "primary_order_id": {
-            "type": "string",
-            "nullable": true
-          },
-          "home_or_away": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/HomeOrAway"
-              }
-            ]
-          },
-          "is_seated": {
-            "type": "boolean",
-            "nullable": true
-          },
-          "missing_seating_reason_type_id": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "ab_tests": {
-            "type": "string",
-            "nullable": true
-          },
-          "pcid": {
-            "type": "string",
-            "nullable": true
-          },
           "hide_seat_details": {
             "type": "boolean"
           }
