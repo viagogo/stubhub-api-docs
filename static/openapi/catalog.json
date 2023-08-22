@@ -2,7 +2,7 @@
   "openapi": "3.0.0",
   "info": {
     "title": "StubHub Catalog API",
-    "version": "1.0.0.66",
+    "version": "1.0.0.69",
     "x-logo": {
       "url": "https://img.vggcdn.net/images/Assets/Icons/bfx/stubhub-logo-merch-purple-mweb.440b3765.svg",
       "backgroundColor": "#222222"
@@ -1000,6 +1000,63 @@
         ]
       }
     },
+    "/catalog/mapevent": {
+      "post": {
+        "tags": [
+          "Events"
+        ],
+        "summary": "Map request to StubHub Event, Venue and Category",
+        "description": "Finds mapped Event, Venue and Category information, if available.",
+        "operationId": "Events_MapEvent",
+        "requestBody": {
+          "x-name": "body",
+          "description": "Request metadata for which we want all mapped information",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MapEventRequestModel"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MapEventResponseModel"
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/forbidden",
+            "description": null
+          },
+          "400": {
+            "$ref": "#/components/responses/validation_failed",
+            "description": null
+          },
+          "401": {
+            "$ref": "#/components/responses/requires_authentication",
+            "description": null
+          },
+          "500": {
+            "$ref": "#/components/responses/internal_server_error",
+            "description": null
+          }
+        },
+        "security": [
+          {
+            "OAuth2": [
+              "read:events"
+            ]
+          }
+        ]
+      }
+    },
     "/catalog/venues": {
       "get": {
         "tags": [
@@ -1934,6 +1991,157 @@
           }
         }
       },
+      "MapEventResponseModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "EventResource": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Event"
+              }
+            ]
+          },
+          "VenueResource": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Venue"
+              }
+            ]
+          },
+          "CategoryResource": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Category"
+              }
+            ]
+          }
+        }
+      },
+      "Venue": {
+        "type": "object",
+        "description": "An venue on the StubHub platform.",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "The venue identifier.",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the venue."
+          },
+          "city": {
+            "type": "string",
+            "description": "The name of the city where the venue is located."
+          },
+          "state_province": {
+            "type": "string",
+            "description": "The name of the State or Province where the venue is located."
+          },
+          "postal_code": {
+            "type": "string",
+            "description": "The postal code for the venue."
+          },
+          "latitude": {
+            "type": "number",
+            "description": "The latitude for the venue.",
+            "format": "double",
+            "nullable": true
+          },
+          "longitude": {
+            "type": "number",
+            "description": "The longitude for the venue.",
+            "format": "double",
+            "nullable": true
+          },
+          "_links": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/VenueLinks"
+              }
+            ]
+          },
+          "_embedded": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/VenueEmbeddedResources"
+              }
+            ]
+          }
+        }
+      },
+      "VenueLinks": {
+        "title": "VenueLinks",
+        "type": "object",
+        "properties": {
+          "self": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Link"
+              }
+            ]
+          }
+        }
+      },
+      "VenueEmbeddedResources": {
+        "title": "VenueEmbeddedResources",
+        "type": "object",
+        "properties": {
+          "country": {
+            "description": "The Country where the venue is located.",
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Country"
+              }
+            ]
+          },
+          "external_mappings": {
+            "type": "array",
+            "description": "The external mappings for this venue",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/EmbeddedExternalMapping"
+            }
+          }
+        }
+      },
+      "MapEventRequestModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "event_name": {
+            "type": "string"
+          },
+          "local_date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "venue_name": {
+            "type": "string"
+          },
+          "venue_state": {
+            "type": "string"
+          },
+          "venue_city": {
+            "type": "string"
+          },
+          "venue_country": {
+            "type": "string"
+          },
+          "category_name": {
+            "type": "string"
+          }
+        }
+      },
       "Venues": {
         "type": "object",
         "additionalProperties": false,
@@ -2033,99 +2241,6 @@
             "nullable": true,
             "items": {
               "$ref": "#/components/schemas/Venue"
-            }
-          }
-        }
-      },
-      "Venue": {
-        "type": "object",
-        "description": "An venue on the StubHub platform.",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "integer",
-            "description": "The venue identifier.",
-            "format": "int32"
-          },
-          "name": {
-            "type": "string",
-            "description": "The name of the venue."
-          },
-          "city": {
-            "type": "string",
-            "description": "The name of the city where the venue is located."
-          },
-          "state_province": {
-            "type": "string",
-            "description": "The name of the State or Province where the venue is located."
-          },
-          "postal_code": {
-            "type": "string",
-            "description": "The postal code for the venue."
-          },
-          "latitude": {
-            "type": "number",
-            "description": "The latitude for the venue.",
-            "format": "double",
-            "nullable": true
-          },
-          "longitude": {
-            "type": "number",
-            "description": "The longitude for the venue.",
-            "format": "double",
-            "nullable": true
-          },
-          "_links": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/VenueLinks"
-              }
-            ]
-          },
-          "_embedded": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/VenueEmbeddedResources"
-              }
-            ]
-          }
-        }
-      },
-      "VenueLinks": {
-        "title": "VenueLinks",
-        "type": "object",
-        "properties": {
-          "self": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/Link"
-              }
-            ]
-          }
-        }
-      },
-      "VenueEmbeddedResources": {
-        "title": "VenueEmbeddedResources",
-        "type": "object",
-        "properties": {
-          "country": {
-            "description": "The Country where the venue is located.",
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/Country"
-              }
-            ]
-          },
-          "external_mappings": {
-            "type": "array",
-            "description": "The external mappings for this venue",
-            "nullable": true,
-            "items": {
-              "$ref": "#/components/schemas/EmbeddedExternalMapping"
             }
           }
         }
@@ -2307,6 +2422,11 @@
       "x-displayName": "Events"
     },
     {
+      "name": "Resource_MapEventResponseModel",
+      "description": "\n<SchemaDefinition schemaRef=\"#/components/schemas/MapEventResponseModel\" showReadOnly={true} showWriteOnly={true} />",
+      "x-displayName": "MapEventResponseModel"
+    },
+    {
       "name": "Resource_Venue",
       "description": "An venue on the StubHub platform.\n<SchemaDefinition schemaRef=\"#/components/schemas/Venue\" showReadOnly={true} showWriteOnly={true} />",
       "x-displayName": "Venue"
@@ -2342,6 +2462,7 @@
         "Resource_Categories",
         "Resource_Event",
         "Resource_Events",
+        "Resource_MapEventResponseModel",
         "Resource_Venue",
         "Resource_Venues"
       ]

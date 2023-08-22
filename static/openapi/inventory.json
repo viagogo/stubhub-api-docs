@@ -2245,6 +2245,10 @@
             "format": "date-time",
             "nullable": true
           },
+          "is_ticket_concierge": {
+            "type": "boolean",
+            "description": "Whether the listing represents a shorted ticket"
+          },
           "barcodes": {
             "type": "array",
             "description": "Barcode(s) for the ticket(s) in this listing.",
@@ -4174,6 +4178,11 @@
             "description": "True if the seller already paid sales tax for the ticket(s); otherwise, false.",
             "nullable": true
           },
+          "is_ticket_concierge": {
+            "type": "boolean",
+            "description": "Whether the listing represents a shorted ticket",
+            "nullable": true
+          },
           "barcodes": {
             "type": "array",
             "description": "Barcode(s) for the ticket(s) in this listing.",
@@ -4414,6 +4423,11 @@
             "description": "True if the seller already paid sales tax for the ticket(s); otherwise, false.",
             "nullable": true
           },
+          "is_ticket_concierge": {
+            "type": "boolean",
+            "description": "Whether the listing represents a shorted ticket",
+            "nullable": true
+          },
           "barcodes": {
             "type": "array",
             "description": "Barcode(s) for the ticket(s) in this listing.",
@@ -4609,6 +4623,11 @@
           "sales_tax_paid": {
             "type": "boolean",
             "description": "True if the seller already paid sales tax for the ticket(s); otherwise, false.",
+            "nullable": true
+          },
+          "is_ticket_concierge": {
+            "type": "boolean",
+            "description": "Whether the listing represents a shorted ticket",
             "nullable": true
           },
           "barcodes": {
