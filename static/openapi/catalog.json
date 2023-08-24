@@ -2,7 +2,7 @@
   "openapi": "3.0.0",
   "info": {
     "title": "StubHub Catalog API",
-    "version": "1.0.0.69",
+    "version": "1.0.0.74",
     "x-logo": {
       "url": "https://img.vggcdn.net/images/Assets/Icons/bfx/stubhub-logo-merch-purple-mweb.440b3765.svg",
       "backgroundColor": "#222222"
@@ -19,14 +19,14 @@
     }
   ],
   "paths": {
-    "/catalog/categories/search": {
+    "/catalog/categories/map": {
       "get": {
         "tags": [
           "Categories"
         ],
         "summary": "Search categories",
-        "description": "Search for categories on the StubHub platform. Use this endpoint to search the entire StubHub category catalog with your application.",
-        "operationId": "Categories_SearchCategories",
+        "description": "Get matching category given the query string.",
+        "operationId": "Categories_MapCategory",
         "parameters": [
           {
             "name": "q",
@@ -36,53 +36,23 @@
               "type": "string",
               "nullable": true
             }
-          },
-          {
-            "name": "page",
-            "in": "query",
-            "description": "Specifies which page of data to retrieve.",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "page_size",
-            "in": "query",
-            "description": "Set custom page sizes on response.",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "updated_since",
-            "in": "query",
-            "description": "Filters the response to only return items that have been updated since the given timestamp",
-            "schema": {
-              "type": "string",
-              "format": "date-time"
-            }
-          },
-          {
-            "name": "sort",
-            "in": "query",
-            "description": "Determines the ordering of items. A comma-separated string containing `resource_version`.",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
           "200": {
             "description": "",
             "content": {
-              "application/hal+json": {
+              "application/octet-stream": {
                 "schema": {
-                  "$ref": "#/components/schemas/Categories"
+                  "type": "string",
+                  "format": "binary"
                 }
               }
             }
+          },
+          "404": {
+            "$ref": "#/components/responses/not_found",
+            "description": null
           },
           "403": {
             "$ref": "#/components/responses/forbidden",
@@ -1202,173 +1172,6 @@
   },
   "components": {
     "schemas": {
-      "Categories": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "total_items": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "page": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "page_size": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "_links": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/CategoriesLinks"
-              }
-            ]
-          },
-          "_embedded": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/CategoriesEmbeddedResources"
-              }
-            ]
-          }
-        }
-      },
-      "CategoriesLinks": {
-        "title": "CategoriesLinks",
-        "type": "object",
-        "properties": {
-          "self": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/Link"
-              }
-            ]
-          },
-          "first": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/Link"
-              }
-            ]
-          },
-          "last": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/Link"
-              }
-            ]
-          },
-          "next": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/Link"
-              }
-            ]
-          },
-          "prev": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/Link"
-              }
-            ]
-          }
-        }
-      },
-      "Link": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "href": {
-            "type": "string",
-            "nullable": true
-          },
-          "title": {
-            "type": "string",
-            "nullable": true
-          },
-          "templated": {
-            "type": "boolean"
-          }
-        }
-      },
-      "CategoriesEmbeddedResources": {
-        "title": "CategoriesEmbeddedResources",
-        "type": "object",
-        "properties": {
-          "deleted_items": {
-            "type": "array",
-            "nullable": true,
-            "items": {
-              "$ref": "#/components/schemas/Category"
-            }
-          },
-          "items": {
-            "type": "array",
-            "nullable": true,
-            "items": {
-              "$ref": "#/components/schemas/Category"
-            }
-          }
-        }
-      },
-      "Category": {
-        "type": "object",
-        "description": "An category on the StubHub platform.",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "integer",
-            "description": "The category identifier.",
-            "format": "int32"
-          },
-          "name": {
-            "type": "string",
-            "description": "The name of the category."
-          },
-          "_links": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/CategoryLinks"
-              }
-            ]
-          }
-        }
-      },
-      "CategoryLinks": {
-        "title": "CategoryLinks",
-        "type": "object",
-        "properties": {
-          "self": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/Link"
-              }
-            ]
-          },
-          "category:webpage": {
-            "description": "The url of the category.",
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/Link"
-              }
-            ]
-          }
-        }
-      },
       "Error": {
         "type": "object",
         "additionalProperties": false,
@@ -1470,6 +1273,23 @@
                 "$ref": "#/components/schemas/Link"
               }
             ]
+          }
+        }
+      },
+      "Link": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "href": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "templated": {
+            "type": "boolean"
           }
         }
       },
@@ -2114,6 +1934,53 @@
           }
         }
       },
+      "Category": {
+        "type": "object",
+        "description": "An category on the StubHub platform.",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "The category identifier.",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the category."
+          },
+          "_links": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/CategoryLinks"
+              }
+            ]
+          }
+        }
+      },
+      "CategoryLinks": {
+        "title": "CategoryLinks",
+        "type": "object",
+        "properties": {
+          "self": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Link"
+              }
+            ]
+          },
+          "category:webpage": {
+            "description": "The url of the category.",
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Link"
+              }
+            ]
+          }
+        }
+      },
       "MapEventRequestModel": {
         "type": "object",
         "additionalProperties": false,
@@ -2138,7 +2005,8 @@
             "type": "string"
           },
           "category_name": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           }
         }
       },
@@ -2407,11 +2275,6 @@
       "description": "View events on the StubHub platform"
     },
     {
-      "name": "Resource_Categories",
-      "description": "\n<SchemaDefinition schemaRef=\"#/components/schemas/Categories\" showReadOnly={true} showWriteOnly={true} />",
-      "x-displayName": "Categories"
-    },
-    {
       "name": "Resource_Event",
       "description": "An event on the StubHub platform.\n<SchemaDefinition schemaRef=\"#/components/schemas/Event\" showReadOnly={true} showWriteOnly={true} />",
       "x-displayName": "Event"
@@ -2459,7 +2322,6 @@
     {
       "name": "Resources",
       "tags": [
-        "Resource_Categories",
         "Resource_Event",
         "Resource_Events",
         "Resource_MapEventResponseModel",

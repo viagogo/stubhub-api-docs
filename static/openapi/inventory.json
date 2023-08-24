@@ -2249,6 +2249,10 @@
             "type": "boolean",
             "description": "Whether the listing represents a shorted ticket"
           },
+          "is_auto_po": {
+            "type": "boolean",
+            "description": "Whether a listing was automatically generated from a purchase order"
+          },
           "barcodes": {
             "type": "array",
             "description": "Barcode(s) for the ticket(s) in this listing.",
@@ -4183,6 +4187,11 @@
             "description": "Whether the listing represents a shorted ticket",
             "nullable": true
           },
+          "is_auto_po": {
+            "type": "boolean",
+            "description": "Whether a listing was automatically generated from a purchase order",
+            "nullable": true
+          },
           "barcodes": {
             "type": "array",
             "description": "Barcode(s) for the ticket(s) in this listing.",
@@ -4428,6 +4437,11 @@
             "description": "Whether the listing represents a shorted ticket",
             "nullable": true
           },
+          "is_auto_po": {
+            "type": "boolean",
+            "description": "Whether a listing was automatically generated from a purchase order",
+            "nullable": true
+          },
           "barcodes": {
             "type": "array",
             "description": "Barcode(s) for the ticket(s) in this listing.",
@@ -4628,6 +4642,11 @@
           "is_ticket_concierge": {
             "type": "boolean",
             "description": "Whether the listing represents a shorted ticket",
+            "nullable": true
+          },
+          "is_auto_po": {
+            "type": "boolean",
+            "description": "Whether a listing was automatically generated from a purchase order",
             "nullable": true
           },
           "barcodes": {
