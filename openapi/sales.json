@@ -2801,6 +2801,13 @@
               }
             ]
           },
+          "ticketholders": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/TicketHolder"
+            }
+          },
           "venue": {
             "description": "The venue where the event is taking place.",
             "nullable": true,
@@ -2930,6 +2937,130 @@
             "oneOf": [
               {
                 "$ref": "#/components/schemas/Link"
+              }
+            ]
+          }
+        }
+      },
+      "TicketHolder": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "full_name": {
+            "type": "string",
+            "nullable": true
+          },
+          "date_of_birth": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "city_of_birth": {
+            "type": "string",
+            "nullable": true
+          },
+          "province_of_birth": {
+            "type": "string",
+            "nullable": true
+          },
+          "city_of_residence": {
+            "type": "string",
+            "nullable": true
+          },
+          "province_of_residence": {
+            "type": "string",
+            "nullable": true
+          },
+          "club_issuer": {
+            "type": "string",
+            "nullable": true
+          },
+          "card_number": {
+            "type": "string",
+            "nullable": true
+          },
+          "document_type": {
+            "type": "string",
+            "nullable": true
+          },
+          "document_number": {
+            "type": "string",
+            "nullable": true
+          },
+          "fiscal_code": {
+            "type": "string",
+            "nullable": true
+          },
+          "security_code": {
+            "type": "string",
+            "nullable": true
+          },
+          "generic_answer": {
+            "type": "string",
+            "nullable": true
+          },
+          "email_address": {
+            "type": "string",
+            "nullable": true
+          },
+          "_links": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TicketHolderLinks"
+              }
+            ]
+          },
+          "_embedded": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TicketHolderEmbeddedResources"
+              }
+            ]
+          }
+        }
+      },
+      "TicketHolderLinks": {
+        "title": "TicketHolderLinks",
+        "type": "object",
+        "properties": {
+          "self": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Link"
+              }
+            ]
+          }
+        }
+      },
+      "TicketHolderEmbeddedResources": {
+        "title": "TicketHolderEmbeddedResources",
+        "type": "object",
+        "properties": {
+          "document_issuing_country": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Country"
+              }
+            ]
+          },
+          "nationality_country": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Country"
               }
             ]
           }
@@ -3193,7 +3324,7 @@
           },
           "mobile_provider": {
             "type": "string",
-            "description": "The vendor being used to transfer the mobile ticket.  Can be one of the following values:\nStubHub,\nTicketMaster,\nTicketmasterCa,\nAXS,\nEventbrite,\nLivenation,\nBroadway,\nTelecharge,\nTicketon,\nSeetickets,\nEtix,\nTixr,\nFesticket,\nInsomniac,\nDiceImport,\nMGMResorts,\nTickeri,\nSmithCenterImport,\nStubwire,\nComputicket,",
+            "description": "The vendor being used to transfer the mobile ticket.  Can be one of the following values:\nStubHub,\nViagogo,\nTicketmaster,\nAXS,\nSeatGeek,\nTicketmaster Account Manager,\nMLB Ballpark,\nMPV,\nPaciolan,\nTickets.com,\nTickets.com RDP,\nVivenu,\nTicketmaster CA,\nEventbrite,\nLivenation,\nBroadway,\nTelecharge,\nTicketon,\nSeetickets,\nEtix,\nTixr,\nFesticket,\nInsomniac,\nDiceImport,\nMGMResorts,\nTickeri,\nSmithCenterImport,\nStubwire,\nComputicket,",
             "nullable": true
           }
         }
@@ -3691,130 +3822,6 @@
             "oneOf": [
               {
                 "$ref": "#/components/schemas/Link"
-              }
-            ]
-          }
-        }
-      },
-      "TicketHolder": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "title": {
-            "type": "string",
-            "nullable": true
-          },
-          "full_name": {
-            "type": "string",
-            "nullable": true
-          },
-          "date_of_birth": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "city_of_birth": {
-            "type": "string",
-            "nullable": true
-          },
-          "province_of_birth": {
-            "type": "string",
-            "nullable": true
-          },
-          "city_of_residence": {
-            "type": "string",
-            "nullable": true
-          },
-          "province_of_residence": {
-            "type": "string",
-            "nullable": true
-          },
-          "club_issuer": {
-            "type": "string",
-            "nullable": true
-          },
-          "card_number": {
-            "type": "string",
-            "nullable": true
-          },
-          "document_type": {
-            "type": "string",
-            "nullable": true
-          },
-          "document_number": {
-            "type": "string",
-            "nullable": true
-          },
-          "fiscal_code": {
-            "type": "string",
-            "nullable": true
-          },
-          "security_code": {
-            "type": "string",
-            "nullable": true
-          },
-          "generic_answer": {
-            "type": "string",
-            "nullable": true
-          },
-          "email_address": {
-            "type": "string",
-            "nullable": true
-          },
-          "_links": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/TicketHolderLinks"
-              }
-            ]
-          },
-          "_embedded": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/TicketHolderEmbeddedResources"
-              }
-            ]
-          }
-        }
-      },
-      "TicketHolderLinks": {
-        "title": "TicketHolderLinks",
-        "type": "object",
-        "properties": {
-          "self": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/Link"
-              }
-            ]
-          }
-        }
-      },
-      "TicketHolderEmbeddedResources": {
-        "title": "TicketHolderEmbeddedResources",
-        "type": "object",
-        "properties": {
-          "document_issuing_country": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/Country"
-              }
-            ]
-          },
-          "nationality_country": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/Country"
               }
             ]
           }
