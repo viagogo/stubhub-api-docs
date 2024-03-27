@@ -440,6 +440,90 @@
         ]
       }
     },
+    "/sales/{saleId}/transferuploads/{transferType}": {
+      "post": {
+        "tags": [
+          "E-Tickets"
+        ],
+        "summary": "Upload e-ticket transfer for a sale",
+        "description": "Supported transfer types are \"acceptance\" for proof of acceptance.",
+        "operationId": "ETicket_UploadSaleTransfer",
+        "parameters": [
+          {
+            "name": "saleId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "transferType",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Specifies which page of data to retrieve.",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "Set custom page sizes on response.",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ETicketUploads"
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/forbidden",
+            "description": null
+          },
+          "400": {
+            "$ref": "#/components/responses/validation_failed",
+            "description": null
+          },
+          "401": {
+            "$ref": "#/components/responses/requires_authentication",
+            "description": null
+          },
+          "500": {
+            "$ref": "#/components/responses/internal_server_error",
+            "description": null
+          }
+        },
+        "security": [
+          {
+            "OAuth2": [
+              "write:user",
+              "write:sales"
+            ]
+          }
+        ]
+      }
+    },
     "/sales/{saleId}/etickets": {
       "get": {
         "tags": [
@@ -3562,6 +3646,14 @@
                 "$ref": "#/components/schemas/Money"
               }
             ]
+          },
+          "reference_numbers": {
+            "type": "array",
+            "description": "Reference numbers for the payment, can be multiple if the payment is split.",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
           },
           "_links": {
             "nullable": true,
