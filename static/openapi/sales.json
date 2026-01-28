@@ -440,6 +440,90 @@
         ]
       }
     },
+    "/sales/{saleId}/transferuploads/{transferType}": {
+      "post": {
+        "tags": [
+          "E-Tickets"
+        ],
+        "summary": "Upload e-ticket transfer for a sale",
+        "description": "Supported transfer types are \"acceptance\" for proof of acceptance.",
+        "operationId": "ETicket_UploadSaleTransfer",
+        "parameters": [
+          {
+            "name": "saleId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "transferType",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Specifies which page of data to retrieve.",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "Set custom page sizes on response.",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ETicketUploads"
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/forbidden",
+            "description": null
+          },
+          "400": {
+            "$ref": "#/components/responses/validation_failed",
+            "description": null
+          },
+          "401": {
+            "$ref": "#/components/responses/requires_authentication",
+            "description": null
+          },
+          "500": {
+            "$ref": "#/components/responses/internal_server_error",
+            "description": null
+          }
+        },
+        "security": [
+          {
+            "OAuth2": [
+              "write:user",
+              "write:sales"
+            ]
+          }
+        ]
+      }
+    },
     "/sales/{saleId}/etickets": {
       "get": {
         "tags": [
@@ -2615,6 +2699,14 @@
               }
             ]
           },
+          "sale:accounttransfer": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Link"
+              }
+            ]
+          },
           "sale:autotrackshipment": {
             "description": "The webpage where a shipment of tickets can be tracked automatically.",
             "nullable": true,
@@ -2634,6 +2726,14 @@
           },
           "sale:confirm": {
             "description": "Confirm the sale.",
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Link"
+              }
+            ]
+          },
+          "sale:confirmaccounttransferpassword": {
             "nullable": true,
             "oneOf": [
               {
@@ -2675,8 +2775,32 @@
               }
             ]
           },
+          "sale:recordretransferfailurereason": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Link"
+              }
+            ]
+          },
+          "sale:regenerateaccounttransferpassword": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Link"
+              }
+            ]
+          },
           "sale:reject": {
             "description": "Report a problem with the sale.",
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Link"
+              }
+            ]
+          },
+          "sale:retransferfailurereasons": {
             "nullable": true,
             "oneOf": [
               {
@@ -3326,6 +3450,22 @@
             "type": "string",
             "description": "The vendor being used to transfer the mobile ticket.  Can be one of the following values:\nStubHub,\nViagogo,\nTicketmaster,\nAXS,\nSeatGeek,\nTicketmaster Account Manager,\nMLB Ballpark,\nMPV,\nPaciolan,\nTickets.com,\nTickets.com RDP,\nVivenu,\nTicketmaster CA,\nEventbrite,\nLivenation,\nBroadway,\nTelecharge,\nTicketon,\nSeetickets,\nEtix,\nTixr,\nFesticket,\nInsomniac,\nDiceImport,\nMGMResorts,\nTickeri,\nSmithCenterImport,\nStubwire,\nComputicket,",
             "nullable": true
+          },
+          "retransfer_failure_reason_record": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/RetransferFailureReasonRecordRequest"
+              }
+            ]
+          },
+          "account_transfer": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/AccountTransferRequest"
+              }
+            ]
           }
         }
       },
@@ -3505,6 +3645,38 @@
           }
         }
       },
+      "RetransferFailureReasonRecordRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "reason_id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "other_reason_text": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "AccountTransferRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "login_url": {
+            "type": "string",
+            "nullable": true
+          },
+          "username": {
+            "type": "string",
+            "nullable": true
+          },
+          "password": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
       "Payment": {
         "type": "object",
         "description": "A payment on the StubHub marketplace that belongs to the currently authenticated user.",
@@ -3562,6 +3734,14 @@
                 "$ref": "#/components/schemas/Money"
               }
             ]
+          },
+          "reference_numbers": {
+            "type": "array",
+            "description": "Reference numbers for the payment, can be multiple if the payment is split.",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
           },
           "_links": {
             "nullable": true,
@@ -3712,6 +3892,15 @@
           },
           "reason_description": {
             "type": "string",
+            "nullable": true
+          },
+          "sale_id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "id": {
+            "type": "integer",
+            "format": "int32",
             "nullable": true
           }
         }
