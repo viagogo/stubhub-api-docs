@@ -2,7 +2,7 @@
   "openapi": "3.0.0",
   "info": {
     "title": "StubHub Catalog API",
-    "version": "1.0.0.75",
+    "version": "1.0.0.40",
     "x-logo": {
       "url": "https://img.vggcdn.net/images/Assets/Icons/bfx/stubhub-logo-merch-purple-mweb.440b3765.svg",
       "backgroundColor": "#222222"
@@ -33,8 +33,7 @@
             "in": "query",
             "description": "The query text to be used to match categories.",
             "schema": {
-              "type": "string",
-              "nullable": true
+              "type": "string"
             }
           }
         ],
@@ -125,7 +124,7 @@
             "in": "query",
             "schema": {
               "type": "integer",
-              "format": "int64",
+              "format": "uint64",
               "nullable": true
             }
           },
@@ -224,7 +223,7 @@
           "Events"
         ],
         "summary": "List events by event ids.",
-        "description": "List a specified set of events on the StubHub platform. Note that the eventID being passed can already be merged with another event. And in this case, details of the new event will be returned, if a different eventId is returned then it means that the event has been merged with the returned event. Also inside _embedded field of the response, a mapping between the original eventId and new eventId will be provided. ",
+        "description": "List a specified set of events on the StubHub platform. Note that the eventID being passed can already be merged with another event. And in this case, details of the new event will be returned, if a different eventId is returned then it means that the event has been merged with the returned event. Also inside _embedded field of the response, a mapping between the original eventId and new eventId will be provided.",
         "operationId": "Events_GetEventsByEventIds",
         "parameters": [
           {
@@ -267,7 +266,7 @@
             "in": "query",
             "schema": {
               "type": "integer",
-              "format": "int64",
+              "format": "uint64",
               "nullable": true
             }
           },
@@ -334,7 +333,12 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/PutEventsRequest"
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/PutEventsRequest"
+                  }
+                ]
               }
             }
           },
@@ -383,7 +387,7 @@
           "Events"
         ],
         "summary": "List events by category id.",
-        "description": "List set of events filtered by category id on the StubHub platform. ",
+        "description": "List set of events filtered by category id on the StubHub platform.",
         "operationId": "Events_GetEventsByCategoryId",
         "parameters": [
           {
@@ -435,7 +439,7 @@
             "in": "query",
             "schema": {
               "type": "integer",
-              "format": "int64",
+              "format": "uint64",
               "nullable": true
             }
           },
@@ -544,8 +548,7 @@
             "required": true,
             "description": "The name of the external platform. Can be `legacy_stubhub`",
             "schema": {
-              "type": "string",
-              "nullable": true
+              "type": "string"
             }
           },
           {
@@ -667,8 +670,7 @@
             "in": "query",
             "description": "The query text to be used to match events.",
             "schema": {
-              "type": "string",
-              "nullable": true
+              "type": "string"
             }
           },
           {
@@ -721,7 +723,7 @@
             "in": "query",
             "schema": {
               "type": "integer",
-              "format": "int64",
+              "format": "uint64",
               "nullable": true
             }
           },
@@ -875,7 +877,7 @@
             "in": "query",
             "schema": {
               "type": "integer",
-              "format": "int64",
+              "format": "uint64",
               "nullable": true
             }
           },
@@ -984,7 +986,12 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/MapEventRequestModel"
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/MapEventRequestModel"
+                  }
+                ]
               }
             }
           },
@@ -1467,6 +1474,14 @@
               "$ref": "#/components/schemas/MergedEntity"
             }
           },
+          "primaries": {
+            "type": "array",
+            "description": "The events that have been merged into this event.",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/Primary"
+            }
+          },
           "venue": {
             "description": "The venue where the event is taking place.",
             "nullable": true,
@@ -1665,6 +1680,15 @@
             "items": {
               "$ref": "#/components/schemas/MergedEntity"
             }
+          }
+        }
+      },
+      "Primary": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "url": {
+            "type": "string"
           }
         }
       },
