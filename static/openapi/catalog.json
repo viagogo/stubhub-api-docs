@@ -2,7 +2,7 @@
   "openapi": "3.0.0",
   "info": {
     "title": "StubHub Catalog API",
-    "version": "1.0.0.40",
+    "version": "1.0.0.60",
     "x-logo": {
       "url": "https://img.vggcdn.net/images/Assets/Icons/bfx/stubhub-logo-merch-purple-mweb.440b3765.svg",
       "backgroundColor": "#222222"
@@ -392,6 +392,159 @@
         "parameters": [
           {
             "name": "categoryId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Specifies which page of data to retrieve.",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "Set custom page sizes on response.",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "updated_since",
+            "in": "query",
+            "description": "Filters the response to only return items that have been updated since the given timestamp",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "Determines the ordering of items. A comma-separated string containing `resource_version`.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "min_resource_version",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "uint64",
+              "nullable": true
+            }
+          },
+          {
+            "name": "country_code",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "description": "Filters results to only include events located in the specified country."
+            }
+          },
+          {
+            "name": "latitude",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "description": "When provided with longitude and distance filters events returned to ones within the specified distance of the lat/long.",
+              "format": "double",
+              "nullable": true
+            }
+          },
+          {
+            "name": "longitude",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "description": "When provided with latitude and distance filters events returned to ones within the specified distance of the lat/long.",
+              "format": "double",
+              "nullable": true
+            }
+          },
+          {
+            "name": "max_distance_in_meters",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "description": "When provided with latitude and longitude filters events returned to ones within the specified distance of the lat/long.",
+              "format": "int32",
+              "nullable": true
+            }
+          },
+          {
+            "name": "genre_id",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "description": "Filters results to only include events for the specified genre id.",
+              "format": "int32",
+              "nullable": true
+            }
+          },
+          {
+            "name": "exclude_parking_passes",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "description": "Filters results to remove parking passes",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Events"
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/forbidden",
+            "description": null
+          },
+          "401": {
+            "$ref": "#/components/responses/requires_authentication",
+            "description": null
+          },
+          "500": {
+            "$ref": "#/components/responses/internal_server_error",
+            "description": null
+          }
+        },
+        "security": [
+          {
+            "OAuth2": [
+              "read:events"
+            ]
+          }
+        ]
+      }
+    },
+    "/catalog/venues/{venueId}/events": {
+      "get": {
+        "tags": [
+          "Events"
+        ],
+        "summary": "List events by venue id.",
+        "description": "List set of events filtered by venue id on the StubHub platform.",
+        "operationId": "Events_GetEventsByVenueId",
+        "parameters": [
+          {
+            "name": "venueId",
             "in": "path",
             "required": true,
             "schema": {
@@ -1034,6 +1187,877 @@
         ]
       }
     },
+    "/catalog/listingoffers": {
+      "post": {
+        "tags": [
+          "Listing Offers"
+        ],
+        "summary": "Create a new instant liquidity offer (buyer bid) for a specific event.",
+        "operationId": "ListingOffers_CreateOffer",
+        "requestBody": {
+          "x-name": "body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/CreateListingOfferRequest"
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/forbidden",
+            "description": null
+          },
+          "400": {
+            "$ref": "#/components/responses/validation_failed",
+            "description": null
+          },
+          "401": {
+            "$ref": "#/components/responses/requires_authentication",
+            "description": null
+          },
+          "500": {
+            "$ref": "#/components/responses/internal_server_error",
+            "description": null
+          }
+        },
+        "security": [
+          {
+            "OAuth2": [
+              "manage:listingoffers"
+            ]
+          }
+        ]
+      }
+    },
+    "/catalog/listingoffers/event/{eventId}": {
+      "get": {
+        "tags": [
+          "Listing Offers"
+        ],
+        "summary": "List caller's live offers (Active + Paused) for a specific event.\nRequires exactly one seating dimension: sectionId (+ optional rowId) OR ticketClassId.",
+        "operationId": "ListingOffers_ListOffers",
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "sectionId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "nullable": true
+            }
+          },
+          {
+            "name": "rowId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "nullable": true
+            }
+          },
+          {
+            "name": "ticketClassId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/not_found",
+            "description": null
+          },
+          "403": {
+            "$ref": "#/components/responses/forbidden",
+            "description": null
+          },
+          "401": {
+            "$ref": "#/components/responses/requires_authentication",
+            "description": null
+          },
+          "500": {
+            "$ref": "#/components/responses/internal_server_error",
+            "description": null
+          }
+        },
+        "security": [
+          {
+            "OAuth2": [
+              "manage:listingoffers"
+            ]
+          }
+        ]
+      }
+    },
+    "/catalog/listingoffers/event/{eventId}/all": {
+      "get": {
+        "tags": [
+          "Listing Offers"
+        ],
+        "summary": "All offers (non-deleted) for a specific event — active, paused, fulfilled and expired.\nRequires exactly one seating dimension: sectionId (+ optional rowId) OR ticketClassId.",
+        "operationId": "ListingOffers_GetAllOffers",
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "sectionId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "nullable": true
+            }
+          },
+          {
+            "name": "rowId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "nullable": true
+            }
+          },
+          {
+            "name": "ticketClassId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/not_found",
+            "description": null
+          },
+          "403": {
+            "$ref": "#/components/responses/forbidden",
+            "description": null
+          },
+          "401": {
+            "$ref": "#/components/responses/requires_authentication",
+            "description": null
+          },
+          "500": {
+            "$ref": "#/components/responses/internal_server_error",
+            "description": null
+          }
+        },
+        "security": [
+          {
+            "OAuth2": [
+              "manage:listingoffers"
+            ]
+          }
+        ]
+      }
+    },
+    "/catalog/listingoffers/{id}": {
+      "get": {
+        "tags": [
+          "Listing Offers"
+        ],
+        "summary": "Get a single offer by ID.",
+        "operationId": "ListingOffers_GetOffer",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/not_found",
+            "description": null
+          },
+          "403": {
+            "$ref": "#/components/responses/forbidden",
+            "description": null
+          },
+          "401": {
+            "$ref": "#/components/responses/requires_authentication",
+            "description": null
+          },
+          "500": {
+            "$ref": "#/components/responses/internal_server_error",
+            "description": null
+          }
+        },
+        "security": [
+          {
+            "OAuth2": [
+              "manage:listingoffers"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Listing Offers"
+        ],
+        "summary": "Soft-delete an offer.",
+        "operationId": "ListingOffers_DeleteOffer",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": null
+          },
+          "403": {
+            "$ref": "#/components/responses/forbidden",
+            "description": null
+          },
+          "401": {
+            "$ref": "#/components/responses/requires_authentication",
+            "description": null
+          },
+          "500": {
+            "$ref": "#/components/responses/internal_server_error",
+            "description": null
+          }
+        },
+        "security": [
+          {
+            "OAuth2": [
+              "manage:listingoffers"
+            ]
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "Listing Offers"
+        ],
+        "summary": "Update mutable fields on an Active or Paused offer.",
+        "operationId": "ListingOffers_UpdateOffer",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "x-name": "body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/PatchListingOfferRequest"
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/forbidden",
+            "description": null
+          },
+          "400": {
+            "$ref": "#/components/responses/validation_failed",
+            "description": null
+          },
+          "401": {
+            "$ref": "#/components/responses/requires_authentication",
+            "description": null
+          },
+          "500": {
+            "$ref": "#/components/responses/internal_server_error",
+            "description": null
+          }
+        },
+        "security": [
+          {
+            "OAuth2": [
+              "manage:listingoffers"
+            ]
+          }
+        ]
+      }
+    },
+    "/catalog/listingoffers/{id}/state": {
+      "patch": {
+        "tags": [
+          "Listing Offers"
+        ],
+        "summary": "Transition offer state: Active (1) to resume, Paused (4) to pause.",
+        "operationId": "ListingOffers_SetOfferState",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "x-name": "body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/SetOfferStateRequest"
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/forbidden",
+            "description": null
+          },
+          "400": {
+            "$ref": "#/components/responses/validation_failed",
+            "description": null
+          },
+          "401": {
+            "$ref": "#/components/responses/requires_authentication",
+            "description": null
+          },
+          "500": {
+            "$ref": "#/components/responses/internal_server_error",
+            "description": null
+          }
+        },
+        "security": [
+          {
+            "OAuth2": [
+              "manage:listingoffers"
+            ]
+          }
+        ]
+      }
+    },
+    "/catalog/listingoffers/bidderbalance": {
+      "get": {
+        "tags": [
+          "Listing Offers"
+        ],
+        "summary": "Get the caller's outstanding bidder balance — total redeemable coupon value\nprojected into the requested currency. This is the spendable amount used by\nthe matching service when gating bids; eligibility (opt-in / daily-limit /\nblocks) is intentionally not applied here.",
+        "operationId": "ListingOffers_GetBidderBalance",
+        "parameters": [
+          {
+            "name": "currencyCode",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "default": "USD"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/not_found",
+            "description": null
+          },
+          "403": {
+            "$ref": "#/components/responses/forbidden",
+            "description": null
+          },
+          "401": {
+            "$ref": "#/components/responses/requires_authentication",
+            "description": null
+          },
+          "500": {
+            "$ref": "#/components/responses/internal_server_error",
+            "description": null
+          }
+        },
+        "security": [
+          {
+            "OAuth2": [
+              "manage:listingoffers"
+            ]
+          }
+        ]
+      }
+    },
+    "/catalog/listingoffers/bidblocks": {
+      "post": {
+        "tags": [
+          "Listing Offers"
+        ],
+        "summary": "Block the caller's own bids on a specific event, or across all events. Set exactly one\nof EventId or BlockAllEvents.\nA client can only manage its own blocks — this never affects internally-imposed blocks.",
+        "operationId": "ListingOffers_AddBidBlock",
+        "requestBody": {
+          "x-name": "body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/AddBidBlockRequest"
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/forbidden",
+            "description": null
+          },
+          "400": {
+            "$ref": "#/components/responses/validation_failed",
+            "description": null
+          },
+          "401": {
+            "$ref": "#/components/responses/requires_authentication",
+            "description": null
+          },
+          "500": {
+            "$ref": "#/components/responses/internal_server_error",
+            "description": null
+          }
+        },
+        "security": [
+          {
+            "OAuth2": [
+              "manage:listingoffers"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Listing Offers"
+        ],
+        "summary": "Remove a bid block the caller previously added, on a specific event or across all events.\nSet exactly one of eventId or blockAllEvents. Only\nremoves the caller's own blocks — internally-imposed blocks are never exposed or affected.",
+        "operationId": "ListingOffers_RemoveBidBlock",
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "nullable": true
+            }
+          },
+          {
+            "name": "blockAllEvents",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": null
+          },
+          "403": {
+            "$ref": "#/components/responses/forbidden",
+            "description": null
+          },
+          "401": {
+            "$ref": "#/components/responses/requires_authentication",
+            "description": null
+          },
+          "500": {
+            "$ref": "#/components/responses/internal_server_error",
+            "description": null
+          }
+        },
+        "security": [
+          {
+            "OAuth2": [
+              "manage:listingoffers"
+            ]
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "Listing Offers"
+        ],
+        "summary": "List the caller's own active bid blocks (event-level and global). Internally-imposed\nblocks on the caller are never included.",
+        "operationId": "ListingOffers_GetBidBlocks",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/not_found",
+            "description": null
+          },
+          "403": {
+            "$ref": "#/components/responses/forbidden",
+            "description": null
+          },
+          "401": {
+            "$ref": "#/components/responses/requires_authentication",
+            "description": null
+          },
+          "500": {
+            "$ref": "#/components/responses/internal_server_error",
+            "description": null
+          }
+        },
+        "security": [
+          {
+            "OAuth2": [
+              "manage:listingoffers"
+            ]
+          }
+        ]
+      }
+    },
+    "/catalog/venues/configurations/{configId}": {
+      "get": {
+        "tags": [
+          "Venue Configurations"
+        ],
+        "summary": "Get a venue configuration",
+        "operationId": "VenueConfigurations_GetVenueConfiguration",
+        "parameters": [
+          {
+            "name": "configId",
+            "in": "path",
+            "required": true,
+            "description": "The venue configuration identifier",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VenueConfigurationResource"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/not_found",
+            "description": null
+          },
+          "403": {
+            "$ref": "#/components/responses/forbidden",
+            "description": null
+          },
+          "401": {
+            "$ref": "#/components/responses/requires_authentication",
+            "description": null
+          },
+          "500": {
+            "$ref": "#/components/responses/internal_server_error",
+            "description": null
+          }
+        },
+        "security": [
+          {
+            "OAuth2": [
+              "read:venue_configurations"
+            ]
+          }
+        ]
+      }
+    },
+    "/catalog/venues/{venueId}/configurations/{configId}/section-mapping": {
+      "post": {
+        "tags": [
+          "Venue Configurations"
+        ],
+        "summary": "Map a source section and row name to a venue configuration section/row",
+        "operationId": "VenueConfigurations_GetSectionMapping",
+        "parameters": [
+          {
+            "name": "venueId",
+            "in": "path",
+            "required": true,
+            "description": "The StubHub venue identifier",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "configId",
+            "in": "path",
+            "required": true,
+            "description": "The venue configuration identifier",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "x-name": "body",
+          "description": "The source section and row names to map",
+          "content": {
+            "application/json": {
+              "schema": {
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/SectionMappingRequest"
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SectionMappingResource"
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/forbidden",
+            "description": null
+          },
+          "400": {
+            "$ref": "#/components/responses/validation_failed",
+            "description": null
+          },
+          "401": {
+            "$ref": "#/components/responses/requires_authentication",
+            "description": null
+          },
+          "500": {
+            "$ref": "#/components/responses/internal_server_error",
+            "description": null
+          }
+        },
+        "security": [
+          {
+            "OAuth2": [
+              "read:venue_configurations"
+            ]
+          }
+        ]
+      }
+    },
+    "/catalog/events/{eventId}/eligible-inventory": {
+      "get": {
+        "tags": [
+          "Venue Configurations"
+        ],
+        "summary": "Get the sections of an event that currently hold eligible inventory",
+        "operationId": "VenueConfigurations_GetEligibleInventory",
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "description": "The StubHub event identifier",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EligibleInventoryResource"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/not_found",
+            "description": null
+          },
+          "403": {
+            "$ref": "#/components/responses/forbidden",
+            "description": null
+          },
+          "401": {
+            "$ref": "#/components/responses/requires_authentication",
+            "description": null
+          },
+          "500": {
+            "$ref": "#/components/responses/internal_server_error",
+            "description": null
+          }
+        },
+        "security": [
+          {
+            "OAuth2": [
+              "read:venue_configurations"
+            ]
+          }
+        ]
+      }
+    },
     "/catalog/venues": {
       "get": {
         "tags": [
@@ -1374,6 +2398,11 @@
           "status": {
             "type": "string",
             "description": "The status of the event. Can be `Normal`, `Postponed`, `Cancelled`, `Rescheduled`, `Relocated`, `RelocatedAndRescheduled`, `Draft`, `Contingent` and `Deleted`"
+          },
+          "venue_config_id": {
+            "type": "integer",
+            "description": "The venue configuration identifier for this event.",
+            "format": "int32"
           },
           "_links": {
             "nullable": true,
@@ -2034,6 +3063,291 @@
           }
         }
       },
+      "CreateListingOfferRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "EventId",
+          "Quantity",
+          "TicketBidPrice",
+          "BidCurrencyCode"
+        ],
+        "properties": {
+          "EventId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Quantity": {
+            "type": "integer",
+            "format": "int32",
+            "maximum": 20.0,
+            "minimum": 1.0
+          },
+          "TicketBidPrice": {
+            "type": "number",
+            "format": "decimal",
+            "minimum": 1.0
+          },
+          "BidCurrencyCode": {
+            "type": "string",
+            "maxLength": 3,
+            "minLength": 3
+          },
+          "AutoRelistEnabled": {
+            "type": "boolean"
+          },
+          "RelistMarginPercentage": {
+            "type": "number",
+            "format": "decimal",
+            "minimum": 0.0
+          },
+          "OfferCount": {
+            "type": "integer",
+            "format": "int32",
+            "maximum": 100.0,
+            "minimum": 1.0
+          },
+          "SectionId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "RowId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "TicketClassId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "ExpiresAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        }
+      },
+      "PatchListingOfferRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "TicketBidPrice": {
+            "type": "number",
+            "format": "decimal",
+            "minimum": 1.0,
+            "nullable": true
+          },
+          "Quantity": {
+            "type": "integer",
+            "format": "int32",
+            "maximum": 20.0,
+            "minimum": 1.0,
+            "nullable": true
+          },
+          "ExpiresAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "AutoRelistEnabled": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "RelistMarginPercentage": {
+            "type": "number",
+            "format": "decimal",
+            "minimum": 0.0,
+            "nullable": true
+          },
+          "OfferCount": {
+            "type": "integer",
+            "format": "int32",
+            "maximum": 100.0,
+            "minimum": 1.0,
+            "nullable": true
+          }
+        }
+      },
+      "SetOfferStateRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "State"
+        ],
+        "properties": {
+          "State": {
+            "description": "Target state: Active (1) to resume, Paused (4) to pause.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/InstantLiquidityOfferState"
+              }
+            ]
+          }
+        }
+      },
+      "InstantLiquidityOfferState": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "Active",
+          "Fulfilled",
+          "Deleted",
+          "Paused"
+        ],
+        "enum": [
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      "AddBidBlockRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "EventId": {
+            "type": "integer",
+            "description": "Event to block bids on. Set exactly one of this or BlockAllEvents.",
+            "format": "int32",
+            "nullable": true
+          },
+          "BlockAllEvents": {
+            "type": "boolean",
+            "description": "Set to true to block all of the caller's bids across every event. Set exactly one of this or EventId.",
+            "nullable": true
+          }
+        }
+      },
+      "VenueConfigurationResource": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "config_id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sections": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VenueConfigSectionResource"
+            }
+          }
+        }
+      },
+      "VenueConfigSectionResource": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "section_id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "section_name": {
+            "type": "string"
+          },
+          "rows": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VenueConfigSectionRowResource"
+            }
+          }
+        }
+      },
+      "VenueConfigSectionRowResource": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "row_id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "row_name": {
+            "type": "string"
+          },
+          "ticket_class_id": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "ticket_class_name": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "SectionMappingResource": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "config_id": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "StubHub_venue_id": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "source_section_name": {
+            "type": "string"
+          },
+          "source_row_name": {
+            "type": "string",
+            "nullable": true
+          },
+          "section_id": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "row_id": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "state": {
+            "type": "string"
+          }
+        }
+      },
+      "SectionMappingRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "Section"
+        ],
+        "properties": {
+          "Section": {
+            "type": "string",
+            "minLength": 1
+          },
+          "Row": {
+            "type": "string",
+            "description": "Row name to map. Omit for general-admission sections, which have no rows.",
+            "nullable": true
+          }
+        }
+      },
+      "EligibleInventoryResource": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "event_id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "section_ids": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        }
+      },
       "Venues": {
         "type": "object",
         "additionalProperties": false,
@@ -2278,8 +3592,10 @@
   "security": [
     {
       "OAuth2": [
+        "manage:listingoffers",
         "read:categories",
         "read:events",
+        "read:venue_configurations",
         "read:venues"
       ]
     }
@@ -2299,6 +3615,15 @@
       "description": "View events on the StubHub platform"
     },
     {
+      "name": "Listing Offers",
+      "description": "Manage instant liquidity offers (buyer bids) on the StubHub platform"
+    },
+    {
+      "name": "Resource_EligibleInventoryResource",
+      "description": "\n<SchemaDefinition schemaRef=\"#/components/schemas/EligibleInventoryResource\" showReadOnly={true} showWriteOnly={true} />",
+      "x-displayName": "EligibleInventoryResource"
+    },
+    {
       "name": "Resource_Event",
       "description": "An event on the StubHub platform.\n<SchemaDefinition schemaRef=\"#/components/schemas/Event\" showReadOnly={true} showWriteOnly={true} />",
       "x-displayName": "Event"
@@ -2314,14 +3639,28 @@
       "x-displayName": "MapEventResponseModel"
     },
     {
+      "name": "Resource_SectionMappingResource",
+      "description": "\n<SchemaDefinition schemaRef=\"#/components/schemas/SectionMappingResource\" showReadOnly={true} showWriteOnly={true} />",
+      "x-displayName": "SectionMappingResource"
+    },
+    {
       "name": "Resource_Venue",
       "description": "An venue on the StubHub platform.\n<SchemaDefinition schemaRef=\"#/components/schemas/Venue\" showReadOnly={true} showWriteOnly={true} />",
       "x-displayName": "Venue"
     },
     {
+      "name": "Resource_VenueConfigurationResource",
+      "description": "\n<SchemaDefinition schemaRef=\"#/components/schemas/VenueConfigurationResource\" showReadOnly={true} showWriteOnly={true} />",
+      "x-displayName": "VenueConfigurationResource"
+    },
+    {
       "name": "Resource_Venues",
       "description": "\n<SchemaDefinition schemaRef=\"#/components/schemas/Venues\" showReadOnly={true} showWriteOnly={true} />",
       "x-displayName": "Venues"
+    },
+    {
+      "name": "Venue Configurations",
+      "description": "View venue configurations on the StubHub platform"
     },
     {
       "name": "Venues",
@@ -2334,6 +3673,8 @@
       "tags": [
         "Categories",
         "Events",
+        "Listing Offers",
+        "Venue Configurations",
         "Venues"
       ]
     },
@@ -2346,10 +3687,13 @@
     {
       "name": "Resources",
       "tags": [
+        "Resource_EligibleInventoryResource",
         "Resource_Event",
         "Resource_Events",
         "Resource_MapEventResponseModel",
+        "Resource_SectionMappingResource",
         "Resource_Venue",
+        "Resource_VenueConfigurationResource",
         "Resource_Venues"
       ]
     }
